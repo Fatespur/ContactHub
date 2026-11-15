@@ -7,6 +7,7 @@ dist-ssr/
 
 # Python / Backend
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 *.so
@@ -45,6 +46,11 @@ venv.bak/
 *.sqlite3
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
 instance/
 *.log
 
