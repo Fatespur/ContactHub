@@ -7,6 +7,7 @@ dist-ssr/
 
 # Python / Backend
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 *.so
@@ -45,15 +46,28 @@ venv.bak/
 *.sqlite3
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
 instance/
 *.log
 
-# Excel temporary / generated data files
+# Excel 数据文件（导入模板与验收样例需随仓库发布，单独放行）
 *.xlsx
 *.xls
+!frontend/public/templates/*.xlsx
+!docs/acceptance/*.xlsx
 uploads/
 exports/
 temp/
+
+# 本地工具目录
+.tmp/
+.tmp-dl/
+.pytest-tmp/
+tmpprobe/
 
 # IDE & Editors
 .vscode/

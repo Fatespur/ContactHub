@@ -1,0 +1,68 @@
+# Render Blueprint —— 一键创建「后端 API + 前端静态站点」
+#
+# 用法：Render Dashboard → New → Blueprint → 选择本仓库 → Apply。
+# 详细步骤与常见问题见 docs/DEPLOY_RENDER.md。
+#
+# 说明：仓库是前后端分离结构，因此这里定义两个服务：
+#   1) addressbook-api：Flask + gunicorn 的 Web Service（Python）
+#   2) addressbook-web：Vite 构建产物 dist/ 的 Static Site
+# 两者域名不同，所以后端通过 CORS_ORIGINS 允许前端来源；前端的 API 地址在构建时
+# 由 VITE_API_BASE_URL 注入（未设置时回退到同源 /api/v1）。
+
+services:
+  # ---------- 后端 API ----------
+  - type: web
+    name: addressbook-api
+    runtime: python
+    plan: free
+    region: singapore
+    branch: main
+    autoDeployTrigger: commit
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    # Render 通过 $PORT 注入端口，必须监听 0.0.0.0；SQLite 写入用单进程 + 多线程更稳。
+    startCommand: gunicorn -b 0.0.0.0:$PORT --workers 1 --threads 4 wsgi:app
+    healthCheckPath: /api/v1/contacts
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.4"
+      # 允许跨域的前端来源，多个用逗号分隔。
+      # "*" 表示允许任意来源（本项目没有登录态/Cookie，演示场景可接受）；
+      # 收紧时改成 https://addressbook-web.onrender.com（以实际前端域名为准）。
+      - key: CORS_ORIGINS
+        value: "*"
+      # 数据库文件路径。默认写到 backend/instance/address_book.sqlite3（临时文件系统，
+      # 重新部署或重启后会清空）。要持久化请参考 docs/DEPLOY_RENDER.md「数据持久化」：
+      #   plan 改为 starter，取消下面 disk 注释，并把 DATABASE 设为 /var/data/address_book.sqlite3
+      # - key: DATABASE
+      #   value: /var/data/address_book.sqlite3
+    # disk:
+    #   name: addressbook-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+
+  # ---------- 前端静态站点 ----------
+  - type: web
+    name: addressbook-web
+    runtime: static
+    branch: main
+    autoDeployTrigger: commit
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    # Vue Router 使用 history 模式，直接把 /settings 等路径回退到 index.html
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: "22.12.0"
+      # 生产构建默认就走真实后端，这里显式声明一次，避免误用 Mock 数据。
+      - key: VITE_USE_MOCK
+        value: "false"
+      # 后端 API 根地址。部署后把 addressbook-api 的实际地址填进来，例如
+      #   https://addressbook-api.onrender.com/api/v1
+      # 修改后需要 Manual Deploy → Clear build cache & deploy 才会生效（构建期变量）。
+      - key: VITE_API_BASE_URL
+        sync: false

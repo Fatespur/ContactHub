@@ -1,0 +1,107 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink-2);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-width: 768px;
+}
+
+.app-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 10px;
+  padding: 26px 10px 24px 0;
+}
+
+@media (max-width: 1279px) {
+  .app-body {
+    padding: 20px 10px 20px 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .app-body {
+    padding: 14px 12px 14px 10px;
+    gap: 0;
+  }
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.app-icon {
+  display: block;
+  flex: none;
+  fill: none;
+}
+
+.app-icon--filled {
+  fill: currentColor;
+}
+
+/* 表格滚动条 */
+.el-scrollbar__bar.is-vertical {
+  width: 6px;
+}
+
+.el-scrollbar__thumb {
+  background-color: #dfe5ec;
+}
+
+.el-scrollbar__thumb:hover {
+  background-color: #cfd8e2;
+}
+
+/* 顶部轻提示 */
+.el-message {
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(30, 45, 65, 0.14);
+}
