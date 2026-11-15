@@ -14,6 +14,9 @@ python -m venv .venv
 
 Vite Proxy 将 `/api` 请求转发至 `http://127.0.0.1:5000`，保留原路径；前端使用 `/api/v1/...` 相对地址。配置示例见 [API 文档第一节](../docs/API.md)。
 
+Linux / Render 部署时将服务根目录设为 `backend`，安装命令为 `pip install -r requirements.txt`，启动命令为 `gunicorn wsgi:app --bind 0.0.0.0:$PORT`。
+环境变量 `DATABASE` 指定 SQLite 文件路径（例如挂载持久磁盘下的 `/var/data/address_book.sqlite3`），父目录自动创建；`CORS_ORIGINS` 填前端实际来源，多个来源用英文逗号分隔。省略时仍使用本地开发默认配置。部署时须挂载持久磁盘以保留重启后的数据。
+
 运行测试（使用独立的真实 SQLite 文件，不写入运行数据库）：
 
 ```powershell

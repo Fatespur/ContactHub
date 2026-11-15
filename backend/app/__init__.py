@@ -1,5 +1,6 @@
 """Minimal Flask application for the EE308FZ address book."""
 
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -142,13 +143,25 @@ def contact_filters() -> tuple[str, list]:
 def create_app(test_config: dict | None = None) -> Flask:
     """Create an isolated application; test_config can supply a temporary database."""
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(DATABASE=str(Path(app.instance_path) / "address_book.sqlite3"))
+    app.config.from_mapping(
+        DATABASE=os.environ.get("DATABASE")
+        or str(Path(app.instance_path) / "address_book.sqlite3"),
+    )
     if test_config is not None:
         app.config.update(test_config)
-    Path(app.instance_path).mkdir(parents=True, exist_ok=True)
+    Path(app.config["DATABASE"]).parent.mkdir(parents=True, exist_ok=True)
     app.json.ensure_ascii = False
     app.json.mimetype = "application/json; charset=utf-8"
-    CORS(app, resources={r"/api/v1/*": {"origins": "http://localhost:5173"}})
+    origins = [
+        origin.strip()
+        for origin in os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",")
+        if origin.strip()
+    ]
+    CORS(app, resources={
+        r"/api/v1/*": {
+            "origins": "*" if "*" in origins else (origins or "http://localhost:5173"),
+        },
+    })
     app.teardown_appcontext(close_db)
     with app.app_context():
         init_db()
