@@ -1,0 +1,64 @@
+# Node.js / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Databases & Runtime
+*.sqlite3
+*.db
+*.db-journal
+instance/
+*.log
+
+# Excel temporary / generated data files
+*.xlsx
+*.xls
+uploads/
+exports/
+temp/
+
+# IDE & Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
