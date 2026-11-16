@@ -4,6 +4,20 @@ Fuzhou University EE308FZ Software Engineering Pair Project — A modern, decoup
 
 ---
 
+## Live Demo
+
+| Service | URL |
+| --- | --- |
+| Frontend (Static Site) | <https://ee308fz-addressbook-web.onrender.com> |
+| Backend API (Web Service) | <https://ee308fz-addressbook.onrender.com/api/v1/contacts> |
+
+Deployed on Render from the `frontend` (Static Site) and `backend` (Web Service) branches. The frontend is built
+with `VITE_USE_MOCK=false` and `VITE_API_BASE_URL` pointing at the API; the backend runs under gunicorn and
+allows the static site origin through `CORS_ORIGINS`. Deployment details:
+[docs/DEPLOY_RENDER.md](docs/DEPLOY_RENDER.md).
+
+> Free instances sleep after 15 minutes of inactivity; the first request may take 30-60 seconds.
+
 ## 1. Project Overview
 
 EE308FZ-AddressBook is a full-stack, decoupled contact management system designed for ease of use, data integrity, and responsive operation. The application provides contact lifecycle management (CRUD), multi-attribute contact details, group categorization, real-time search, favorite pinning, and bulk Excel (`.xlsx`) import and export.
