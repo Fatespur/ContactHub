@@ -12,7 +12,11 @@ function init() {
 }
 
 /**
- * 断点：xl ≥1280（三栏）| lg 1024–1279（抽屉）| md 768–1023（图标侧栏）| sm <768（预留）
+ * Breakpoints:
+ * - xl >= 1280 (three-column layout)
+ * - lg 1024-1279 (drawer detail panel)
+ * - md 768-1023 (icon sidebar rail)
+ * - sm < 768 (reserved / mobile fallback)
  */
 export function useBreakpoint() {
   init()

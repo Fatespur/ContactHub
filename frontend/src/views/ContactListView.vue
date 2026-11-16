@@ -55,7 +55,7 @@ const initialLoading = computed(() => !state.initialized && state.loading)
 const isMac = computed(() => /Mac|iPhone|iPad/i.test(navigator.platform || ''))
 const shortcutLabel = computed(() => (isMac.value ? '⌘K' : 'Ctrl K'))
 
-// 窄屏进入时详情以抽屉形式按需打开，避免首屏弹出抽屉
+// On narrower viewports, open detail drawer on demand rather than automatically on first load
 if (!isDesktop.value) state.detailOpen = false
 
 watch(isDesktop, (desktop) => {
@@ -300,7 +300,7 @@ async function handleExport() {
       `contacts_export_${formatStamp()}.xlsx`
     downloadBlob(response.data, filename)
   } catch {
-    /* 错误提示由请求拦截器统一处理 */
+    /* Error notifications are handled globally by Axios response interceptor */
   } finally {
     exportLoading.value = false
   }

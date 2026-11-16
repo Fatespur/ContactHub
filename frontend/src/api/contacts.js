@@ -2,8 +2,9 @@ import request from './request'
 import * as mock from './mock'
 
 /**
- * 显式设置 VITE_USE_MOCK=false 时请求真实后端；未设置时开发环境默认 Mock，
- * 生产构建（vite build）默认走真实后端，避免部署后仍在用假数据。
+ * When VITE_USE_MOCK=false is explicitly set, requests are sent to the real backend.
+ * When unset, development mode defaults to Mock data, while production builds
+ * (vite build) default to the real backend to prevent accidental mock usage in production.
  */
 export const isMockMode = import.meta.env.VITE_USE_MOCK
   ? import.meta.env.VITE_USE_MOCK !== 'false'

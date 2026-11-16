@@ -174,7 +174,7 @@ function downloadFailures() {
       </div>
     </template>
 
-    <!-- 选择文件 -->
+    <!-- File selection -->
     <div v-if="stage === 'select'" class="dlg-body">
       <div class="dlg-note">
         <AppIcon name="info" :size="15" />
@@ -215,7 +215,7 @@ function downloadFailures() {
       </div>
     </div>
 
-    <!-- 上传 / 解析 -->
+    <!-- Upload / parsing -->
     <div v-else-if="stage === 'uploading'" class="dlg-body">
       <div class="file-card">
         <div class="file-icon">
@@ -237,7 +237,7 @@ function downloadFailures() {
       <p class="result-note">解析期间请勿关闭窗口。完成后将显示成功与失败明细。</p>
     </div>
 
-    <!-- 结果 -->
+    <!-- Result summary -->
     <div v-else class="dlg-body" aria-live="polite">
       <div v-if="banner" class="result-banner" :class="`is-${banner.tone}`">
         <AppIcon :name="banner.icon" :size="17" />

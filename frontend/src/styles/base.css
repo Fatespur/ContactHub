@@ -87,7 +87,7 @@ ol {
   fill: currentColor;
 }
 
-/* 表格滚动条 */
+/* Table scrollbar */
 .el-scrollbar__bar.is-vertical {
   width: 6px;
 }
@@ -100,7 +100,7 @@ ol {
   background-color: #cfd8e2;
 }
 
-/* 顶部轻提示 */
+/* Top message toast */
 .el-message {
   border-radius: 8px;
   box-shadow: 0 6px 24px rgba(30, 45, 65, 0.14);

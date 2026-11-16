@@ -423,7 +423,7 @@ onBeforeUnmount(() => {
   color: var(--color-ink-4);
 }
 
-/* el-table 外观对齐设计稿 */
+/* Align el-table appearance with design specs */
 .contact-table {
   --el-table-border-color: transparent;
   --el-table-header-bg-color: transparent;

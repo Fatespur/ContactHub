@@ -1,16 +1,16 @@
-# Render Blueprint —— 一键创建「后端 API + 前端静态站点」
+# Render Blueprint — Deploy Backend API + Frontend Static Site
 #
-# 用法：Render Dashboard → New → Blueprint → 选择本仓库 → Apply。
-# 详细步骤与常见问题见 docs/DEPLOY_RENDER.md。
+# Usage: Render Dashboard -> New -> Blueprint -> Select this repo -> Apply.
+# For detailed instructions and FAQ, see docs/DEPLOY_RENDER.md.
 #
-# 说明：仓库是前后端分离结构，因此这里定义两个服务：
-#   1) addressbook-api：Flask + gunicorn 的 Web Service（Python）
-#   2) addressbook-web：Vite 构建产物 dist/ 的 Static Site
-# 两者域名不同，所以后端通过 CORS_ORIGINS 允许前端来源；前端的 API 地址在构建时
-# 由 VITE_API_BASE_URL 注入（未设置时回退到同源 /api/v1）。
+# Architecture: Decoupled frontend and backend defining two services:
+#   1) addressbook-api: Flask + gunicorn Web Service (Python)
+#   2) addressbook-web: Vite build output dist/ Static Site
+# Backend enables CORS via CORS_ORIGINS; frontend API base URL is injected
+# at build time via VITE_API_BASE_URL (falls back to relative /api/v1 if unset).
 
 services:
-  # ---------- 后端 API ----------
+  # ---------- Backend API ----------
   - type: web
     name: addressbook-api
     runtime: python
@@ -20,20 +20,20 @@ services:
     autoDeployTrigger: commit
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    # Render 通过 $PORT 注入端口，必须监听 0.0.0.0；SQLite 写入用单进程 + 多线程更稳。
+    # Render injects port via $PORT; must bind 0.0.0.0; single worker with threads is optimal for SQLite.
     startCommand: gunicorn -b 0.0.0.0:$PORT --workers 1 --threads 4 wsgi:app
     healthCheckPath: /api/v1/contacts
     envVars:
       - key: PYTHON_VERSION
         value: "3.13.4"
-      # 允许跨域的前端来源，多个用逗号分隔。
-      # "*" 表示允许任意来源（本项目没有登录态/Cookie，演示场景可接受）；
-      # 收紧时改成 https://addressbook-web.onrender.com（以实际前端域名为准）。
+      # Allowed CORS origins for frontend, separated by commas.
+      # "*" allows any origin (acceptable for demos without auth cookies);
+      # Change to https://addressbook-web.onrender.com for production.
       - key: CORS_ORIGINS
         value: "*"
-      # 数据库文件路径。默认写到 backend/instance/address_book.sqlite3（临时文件系统，
-      # 重新部署或重启后会清空）。要持久化请参考 docs/DEPLOY_RENDER.md「数据持久化」：
-      #   plan 改为 starter，取消下面 disk 注释，并把 DATABASE 设为 /var/data/address_book.sqlite3
+      # Database file path. Defaults to backend/instance/address_book.sqlite3 (ephemeral filesystem).
+      # For persistence, refer to docs/DEPLOY_RENDER.md "Data Persistence":
+      #   Change plan to starter, uncomment disk below, and set DATABASE to /var/data/address_book.sqlite3
       # - key: DATABASE
       #   value: /var/data/address_book.sqlite3
     # disk:
@@ -41,7 +41,7 @@ services:
     #   mountPath: /var/data
     #   sizeGB: 1
 
-  # ---------- 前端静态站点 ----------
+  # ---------- Frontend Static Site ----------
   - type: web
     name: addressbook-web
     runtime: static
@@ -50,7 +50,7 @@ services:
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
-    # Vue Router 使用 history 模式，直接把 /settings 等路径回退到 index.html
+    # Vue Router uses history mode; rewrite routes like /settings to /index.html
     routes:
       - type: rewrite
         source: /*
@@ -58,11 +58,11 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22.12.0"
-      # 生产构建默认就走真实后端，这里显式声明一次，避免误用 Mock 数据。
+      # Production build defaults to real backend; declared explicitly to avoid mock usage.
       - key: VITE_USE_MOCK
         value: "false"
-      # 后端 API 根地址。部署后把 addressbook-api 的实际地址填进来，例如
+      # Backend API root URL. Set the actual addressbook-api URL after deployment, e.g.:
       #   https://addressbook-api.onrender.com/api/v1
-      # 修改后需要 Manual Deploy → Clear build cache & deploy 才会生效（构建期变量）。
+      # Note: Re-deployment with "Clear build cache & deploy" is required after modification.
       - key: VITE_API_BASE_URL
         sync: false

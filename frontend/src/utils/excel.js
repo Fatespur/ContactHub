@@ -5,7 +5,7 @@ export const IMPORT_TEMPLATE_NAME = '联系人导入模板.xlsx'
 
 const XLSX_RE = /\.xlsx$/i
 
-/** 导入前的本地校验，返回 { valid, message } */
+/** Client-side validation before upload, returns { valid, message }. */
 export function validateExcelFile(file) {
   if (!file) return { valid: false, message: '请选择要导入的文件' }
   if (!XLSX_RE.test(file.name || '')) {
@@ -35,7 +35,7 @@ function toCsv(rows) {
   return `\uFEFF${rows.map((row) => row.map(csvCell).join(',')).join('\r\n')}`
 }
 
-/** 导入失败明细 CSV（行号,姓名,原因） */
+/** Build CSV data for import failure details (row, name, reason). */
 export function buildFailureCsv(errors = []) {
   const rows = [['行号', '姓名', '原因']]
   errors.forEach((item) => {
@@ -50,7 +50,7 @@ function joinItems(list, formatter) {
 }
 
 /**
- * Mock 导出演示用 CSV：与契约 8 列、多行单元格规则一致
+ * Mock export demonstration CSV: matches contract's 8 columns and multi-line cell format.
  */
 export function buildContactsCsv(items = []) {
   const rows = [['姓名', '分组', '是否收藏', '电话', '邮箱', '社交账号', '地址', '备注']]

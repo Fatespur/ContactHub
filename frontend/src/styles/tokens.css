@@ -1,5 +1,5 @@
 :root {
-  /* 品牌与中性色 */
+  /* Brand and neutral colors */
   --color-primary: #6883a0;
   --color-primary-strong: #5b7691;
   --color-primary-soft: #e9eef5;
@@ -23,21 +23,21 @@
   --color-success-soft: #f3f8f4;
   --color-danger-soft: #fcf0ef;
 
-  /* 形状 */
+  /* Shape and border radius */
   --radius-card: 14px;
   --radius-control: 8px;
   --shadow-card: 0 2px 10px rgba(37, 53, 74, 0.045);
 
-  /* 字体 */
+  /* Typography */
   --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Segoe UI",
     system-ui, -apple-system, sans-serif;
 
-  /* 布局 */
+  /* Layout dimensions */
   --header-height: 82px;
   --sidebar-width: 202px;
   --detail-width: 300px;
 
-  /* Element Plus 映射 */
+  /* Element Plus design token mappings */
   --el-color-primary: var(--color-primary);
   --el-color-primary-light-3: #8fa5bc;
   --el-color-primary-light-5: #a8b9ca;

@@ -1,13 +1,13 @@
 import { GROUP_PRESETS } from '@/constants/contact'
 
-/** 取主项：优先 is_primary，其次第一项 */
+/** Get primary entry: prioritizes is_primary=true, falling back to the first item. */
 export function primaryOf(list) {
   if (!Array.isArray(list) || list.length === 0) return null
   return list.find((item) => item.is_primary) || list[0]
 }
 
 /**
- * 表格「其他联系方式」取值：邮箱 > 社交账号 > 地址
+ * Resolves "other contact info" for table view in priority order: email > social > address.
  * @returns {{ icon: string, text: string, type: string } | null}
  */
 export function otherContact(contact) {
@@ -23,13 +23,13 @@ export function otherContact(contact) {
   return null
 }
 
-/** 姓名首字，用于生成占位头像 */
+/** First character of name, used to generate placeholder avatar. */
 export function initials(name) {
   const text = String(name ?? '').trim()
   return text ? text.charAt(0) : '?'
 }
 
-/** 由全量联系人聚合分组统计（不受当前筛选影响） */
+/** Aggregate group statistics from full contacts list (independent of current filters). */
 export function buildGroupStats(items) {
   const counter = new Map()
   items.forEach((item) => {
@@ -50,7 +50,7 @@ export function buildGroupStats(items) {
     })
 }
 
-/** 页码窗口：数据量较小直接全展示 */
+/** Pagination window: display all page numbers directly when count is small. */
 export function buildPageList(page, pageCount) {
   if (pageCount <= 7) {
     return Array.from({ length: pageCount }, (_, index) => index + 1)
@@ -65,7 +65,7 @@ export function buildPageList(page, pageCount) {
   return result
 }
 
-/** 删除或筛选后保持选中项落在可见范围内 */
+/** Keep selected contact within visible range after deletion or filter change. */
 export function resolveSelectedId(items, previousId) {
   if (items.some((item) => item.id === previousId)) return previousId
   return items.length ? items[0].id : null

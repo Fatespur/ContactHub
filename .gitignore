@@ -54,7 +54,7 @@ venv.bak/
 instance/
 *.log
 
-# Excel 数据文件（导入模板与验收样例需随仓库发布，单独放行）
+# Excel data files (import templates and acceptance samples are tracked)
 *.xlsx
 *.xls
 !frontend/public/templates/*.xlsx
@@ -63,7 +63,7 @@ uploads/
 exports/
 temp/
 
-# 本地工具目录
+# Local temporary and tool directories
 .tmp/
 .tmp-dl/
 .pytest-tmp/

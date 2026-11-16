@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
 const service = axios.create({
-  // 本地开发走 Vite 代理（/api/v1）；部署到独立域名时用 VITE_API_BASE_URL 指定后端地址。
+  // Local development uses Vite proxy (/api/v1); specify VITE_API_BASE_URL when deploying to a separate domain.
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
   timeout: 15000
 })
