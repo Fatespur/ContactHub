@@ -4,7 +4,8 @@ import { ElMessage } from 'element-plus'
 const service = axios.create({
   // Local development uses Vite proxy (/api/v1); specify VITE_API_BASE_URL when deploying to a separate domain.
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
-  timeout: 15000
+  // Free cloud instances (e.g. Render Free) need 30-60 s to wake up; a 15 s timeout reports a false failure.
+  timeout: 60000
 })
 
 service.interceptors.response.use(
@@ -53,7 +54,7 @@ service.interceptors.response.use(
         message = `请求失败（${error.response.status}）`
       }
     } else if (error.code === 'ECONNABORTED') {
-      message = '请求超时，请稍后重试'
+      message = '服务正在启动（免费实例冷启动约需 30–60 秒），请稍后重试'
     }
 
     const normalized = new Error(message)
