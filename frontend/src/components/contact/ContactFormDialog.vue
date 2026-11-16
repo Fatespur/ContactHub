@@ -23,7 +23,7 @@ const emit = defineEmits(['update:modelValue', 'submit'])
 
 const { state } = useContactStore()
 
-const PHONE_RE = /^[\d+\-() ]+$/
+const PHONE_RE = /^[\d+\-()]+$/
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const formRef = ref(null)

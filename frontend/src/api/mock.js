@@ -11,8 +11,19 @@ export class MockApiError extends Error {
   }
 }
 
-const PHONE_RE = /^[\d+\-() ]+$/
+const PHONE_RE = /^[\d+\-()]+$/
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const EDITABLE_FIELDS = [
+  'name',
+  'group',
+  'is_favorite',
+  'notes',
+  'phones',
+  'emails',
+  'social_accounts',
+  'addresses'
+]
 
 let contacts = createInitialContacts()
 let nextId = contacts.reduce((max, item) => Math.max(max, item.id), 0) + 1
@@ -97,16 +108,53 @@ function normalizeAddresses(input, errors) {
   return ensureSinglePrimary(result)
 }
 
-/** 与契约一致：PUT 为全量替换，缺失字段按默认值重置 */
-function normalizePayload(payload = {}) {
+/** Matches backend contract: PUT requires all 8 editable fields; POST applies contract defaults. */
+function normalizePayload(payload = {}, isFullUpdate = false) {
+  if (isFullUpdate) {
+    const missing = EDITABLE_FIELDS.filter((field) => !(field in payload))
+    if (missing.length > 0) {
+      const details = {}
+      missing.sort().forEach((field) => {
+        details[field] = ['全量更新必须提供此字段']
+      })
+      throw new MockApiError('输入参数有误，请检查', { details })
+    }
+  }
+
   const errors = {}
   const name = String(payload.name ?? '').trim()
   if (!name) pushError(errors, 'name', '姓名不能为空')
   else if (name.length > 50) pushError(errors, 'name', '姓名长度不能超过 50 字符')
 
-  let notes = payload.notes == null ? null : String(payload.notes).trim()
-  if (!notes) notes = null
-  else if (notes.length > 500) pushError(errors, 'notes', '备注长度不能超过 500 字符')
+  if ('is_favorite' in payload && typeof payload.is_favorite !== 'boolean') {
+    pushError(errors, 'is_favorite', '必须为 boolean')
+  }
+
+  let notes = payload.notes
+  if (notes !== null && notes !== undefined) {
+    if (typeof notes !== 'string') {
+      pushError(errors, 'notes', '必须为字符串或 null')
+      notes = null
+    } else {
+      notes = notes.trim()
+      if (!notes) notes = null
+      else if (notes.length > 500) pushError(errors, 'notes', '备注长度不能超过 500 字符')
+    }
+  } else {
+    notes = null
+  }
+
+  let group = payload.group
+  if (group !== null && group !== undefined) {
+    if (typeof group !== 'string') {
+      pushError(errors, 'group', '必须为字符串或 null')
+      group = null
+    } else {
+      group = group.trim() || null
+    }
+  } else {
+    group = null
+  }
 
   const phones = normalizePhones(payload.phones, errors)
   const emails = normalizeEmails(payload.emails, errors)
@@ -116,8 +164,6 @@ function normalizePayload(payload = {}) {
   if (Object.keys(errors).length > 0) {
     throw new MockApiError('输入参数有误，请检查', { details: errors })
   }
-
-  const group = payload.group == null ? null : String(payload.group).trim() || null
 
   return {
     name,
@@ -204,7 +250,7 @@ export async function createContact(payload) {
 export async function updateContact(id, payload) {
   await wait(320)
   const contact = findContact(id)
-  Object.assign(contact, normalizePayload(payload), { updated_at: nowIso() })
+  Object.assign(contact, normalizePayload(payload, true), { updated_at: nowIso() })
   return { id: contact.id }
 }
 
@@ -223,7 +269,7 @@ export async function updateFavorite(id, isFavorite) {
   return { id: contact.id, is_favorite: contact.is_favorite }
 }
 
-/* ---------------- 导入 / 导出（Mock 演示） ---------------- */
+/* ---------------- Import / Export (Mock Demo) ---------------- */
 
 const DEMO_IMPORT_ROWS = [
   {
