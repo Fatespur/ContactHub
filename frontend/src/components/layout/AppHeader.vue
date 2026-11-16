@@ -13,12 +13,6 @@ import AppIcon from '@/components/common/AppIcon.vue'
         <p>AddressBook</p>
       </div>
     </div>
-
-    <div class="topbar-right">
-      <div class="user-avatar">J</div>
-      <span class="user-name">JiaHuiYe</span>
-      <AppIcon name="chevron-down" :size="14" class="caret" />
-    </div>
   </header>
 </template>
 
@@ -71,37 +65,6 @@ import AppIcon from '@/components/common/AppIcon.vue'
   color: var(--color-ink-4);
 }
 
-.topbar-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 4px 6px;
-  border-radius: var(--radius-control);
-  color: var(--color-ink-2);
-}
-
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--color-avatar-detail);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 500;
-  display: grid;
-  place-items: center;
-}
-
-.user-name {
-  font-size: 14px;
-  letter-spacing: 0.2px;
-}
-
-.caret {
-  color: var(--color-ink-4);
-}
-
 @media (max-width: 1023px) {
   .topbar {
     height: 64px;
@@ -125,22 +88,6 @@ import AppIcon from '@/components/common/AppIcon.vue'
 
   .brand-text p {
     display: none;
-  }
-
-  .topbar-right {
-    gap: 8px;
-    padding-right: 2px;
-  }
-
-  .user-name,
-  .caret {
-    display: none;
-  }
-
-  .user-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
   }
 }
 </style>
