@@ -1,81 +1,80 @@
-# EE308FZ-AddressBook 开发规范与团队协作准则
+# EE308FZ-AddressBook Development Standards & Collaboration Guidelines
 
 > [!IMPORTANT]
-> **当前状态**：后端拟定协作准则提案（待前端成员审阅确认）。  
-> **适用范围**：EE308FZ 双人软件工程作业团队全体成员。  
-> **团队分工**：
-> - **后端**：Python Flask + SQLite + openpyxl，负责数据存储模型、RESTful 接口及 Excel 解析。
-> - **前端**：Vue 3 + JavaScript + Element Plus + Vite，负责 UI 交互、组件设计及接口联调。
-> 
-> 本文档旨在以两人短期课程作业的实际开发效率为核心，建立简单、明确、一致的协作标准。
+> **Scope**: All team members of the EE308FZ Software Engineering Pair Project.
+> **Roles & Ownership**:
+> - **Backend**: Python Flask + SQLite + openpyxl, responsible for database persistence, RESTful APIs, and Excel import/export processing.
+> - **Frontend**: Vue 3 + JavaScript + Element Plus + Vite, responsible for UI/UX interaction, component hierarchy, client state, and API integration.
+>
+> This document establishes clean, concise, and consistent standards to maintain code quality and delivery efficiency throughout the pair software engineering project.
 
 ---
 
-## 目录
+## Table of Contents
 
-- [一、前后端协作基本准则](#一前后端协作基本准则)
-- [二、代码风格与开发规范](#二代码风格与开发规范)
-  - [1. 前端规范 (Vue 3 / JavaScript)](#1-前端规范-vue-3--javascript)
-  - [2. 后端规范 (Python / Flask)](#2-后端规范-python--flask)
-- [三、命名规则矩阵](#三命名规则矩阵)
-- [四、Git 工作流与分支管理](#四git-工作流与分支管理)
-- [五、Git Commit 提交规范](#五git-commit-提交规范)
-- [六、Pull Request（PR）与代码审查规范](#六pull-requestpr与代码审查规范)
-- [七、规范确认状态与待确认事项](#七规范确认状态与待确认事项)
-
----
-
-## 一、前后端协作基本准则
-
-1. **契约优先原则（Contract-First）**：
-   - 所有的 API 接口路径、请求方法、请求 Body 结构、响应 Body 结构以 [docs/API.md](API.md) 为唯一依据。
-   - 严禁任何一方在未沟通的情况下私自修改字段名、字段类型或 HTTP 状态码。
-   - 如遇接口字段无法满足需求，必须**先更新 API.md 文档并经双方确认**，再进入代码实现。
-2. **环境隔离与联调基准**：
-   - 前端本地服务端口：`5173`（Vite 默认）。
-   - 后端本地服务端口：`5000`（Flask 默认）。
-   - API 统一路由前缀：`/api/v1`。
-   - 开发期跨域统一采用前端 Vite 反向代理（Proxy）转发至 `/api/v1`，消除浏览器 CORS 问题。
-3. **独立开发与联调解耦**：
-   - 在后端完成真实接口前，前端可根据 `docs/API.md` 中的响应示例进行 Mock 或独立界面开发。
-   - 后端针对核心接口及 Excel 导入导出编写测试用例，保证输出数据结构与契约百分之百吻合。
+- [1. Collaboration Principles](#1-collaboration-principles)
+- [2. Code Style & Conventions](#2-code-style--conventions)
+  - [2.1 Frontend Conventions (Vue 3 / JavaScript)](#21-frontend-conventions-vue-3--javascript)
+  - [2.2 Backend Conventions (Python / Flask)](#22-backend-conventions-python--flask)
+- [3. Naming Convention Matrix](#3-naming-convention-matrix)
+- [4. Git Workflow & Branch Strategy](#4-git-workflow--branch-strategy)
+- [5. Git Commit Guidelines](#5-git-commit-guidelines)
+- [6. Pull Request (PR) & Code Review Guidelines](#6-pull-request-pr--code-review-guidelines)
+- [7. Standards Alignment & Technical Decisions](#7-standards-alignment--technical-decisions)
 
 ---
 
-## 二、代码风格与开发规范
+## 1. Collaboration Principles
 
-### 1. 前端规范 (Vue 3 / JavaScript)
-- **开发范式**：统一使用 Vue 3 **Composition API** 配合 `<script setup>` 语法，禁止在新建组件中使用 Options API。
-- **缩进与排版**：使用 **2 空格缩进**，禁止使用 Tab 制表符。行末禁止留有多余空白。
-- **引号规则**：JavaScript 代码优先使用单引号 `'`，JSX / Vue Template 属性使用双引号 `"`。
-- **网络请求封装**：前端统一使用 Axios 实例封装（如 `src/api/request.js`），统一处理 `baseURL: '/api/v1'`、响应统一解包以及 Element Plus 的 `ElMessage` 错误提示。
-
-### 2. 后端规范 (Python / Flask)
-- **代码规范**：严格遵循 **PEP 8** 编码规范。
-- **缩进与排版**：使用 **4 空格缩进**，严禁混用 Tab 与空格。单行最大字符数建议控制在 88~100 字符。
-- **类型提示 (Type Hints)**：关键函数与路由控制器建议标明参数类型与返回类型，提升可读性。
-- **注释与文档**：公共函数与核心 Service 需包含简要 Docstring，说明功能、参数与返回值。
-- **全局异常拦截**：后端配置全局统一错误处理器（`@app.errorhandler`），捕获业务异常与 4xx/5xx 错误，确保返回与契约完全一致的 JSON 错误体。
+1. **Contract-First Principle**:
+   - All API endpoints, HTTP methods, request bodies, and response structures are defined exclusively in [docs/API.md](API.md).
+   - Neither developer may modify field names, field types, or HTTP status codes unilaterally without mutual agreement.
+   - Any interface adjustments must be updated and confirmed in `docs/API.md` before writing implementation code.
+2. **Environment Isolation & Dev Proxy**:
+   - Frontend local server port: `5173` (Vite default).
+   - Backend local server port: `5000` (Flask default).
+   - Unified API routing prefix: `/api/v1`.
+   - Local cross-origin requests are handled via Vite reverse proxy in development, eliminating browser CORS issues.
+3. **Independent Parallel Development**:
+   - The frontend implements UI views and mock data handlers conforming strictly to `docs/API.md`.
+   - The backend validates endpoints and Excel handling via automated tests to guarantee 100% contract compliance.
 
 ---
 
-## 三、命名规则矩阵
+## 2. Code Style & Conventions
 
-| 目标类型 | 命名范式 | 示例 | 补充说明 |
+### 2.1 Frontend Conventions (Vue 3 / JavaScript)
+- **Paradigm**: Vue 3 **Composition API** with `<script setup>`. Options API is disallowed in newly authored components.
+- **Indentation & Formatting**: **2 spaces** indentation; tabs are forbidden. No trailing whitespace.
+- **Quotes**: Single quotes `'` for JavaScript strings; double quotes `"` for HTML / Vue template attributes.
+- **Network Requests**: Encapsulated in Axios instances (`src/api/request.js`) providing unified `baseURL: '/api/v1'`, response data unwrapping, and Element Plus `ElMessage` notification handling.
+
+### 2.2 Backend Conventions (Python / Flask)
+- **Code Standards**: Adhere strictly to **PEP 8**.
+- **Indentation**: **4 spaces** indentation; never mix tabs and spaces. Line length recommended within 88–100 characters.
+- **Type Hints**: Type annotations are recommended for public functions and route controllers to improve maintainability.
+- **Docstrings & Comments**: Concise docstrings describing purpose, arguments, and return types. Code comments must be written in English.
+- **Global Exception Handling**: Global error handlers (`@app.errorhandler`) capture validation errors and 4xx/5xx exceptions, ensuring unified JSON error bodies matching the contract.
+
+---
+
+## 3. Naming Convention Matrix
+
+| Target Element | Convention | Example | Notes |
 | :--- | :--- | :--- | :--- |
-| **API 路径 (REST)** | kebab-case / 名词复数 | `/api/v1/contacts`, `/contacts/export` | 全小写短横线，统一前缀 |
-| **JSON 请求/响应字段** | **`snake_case`** | `is_favorite`, `social_accounts`, `created_at` | **前后端交互强制一律小写下划线** |
-| **前端 Vue 组件文件** | PascalCase | `ContactList.vue`, `ContactDialog.vue` | 大驼峰多词组合 |
-| **前端 JS 变量 / 函数名** | **`camelCase`** | `contactList`, `fetchContacts()`, `isLoading` | 变量为名词，函数动词开头 |
-| **前端 JS 常量** | UPPER_SNAKE_CASE | `API_TIMEOUT`, `DEFAULT_PAGE_SIZE` | 全大写下划线 |
-| **Python 文件 / 模块** | snake_case | `contact_service.py`, `models.py` | 全小写下划线 |
-| **Python 类名** | PascalCase | `ContactModel`, `ContactService` | 大驼峰 |
-| **Python 变量 / 函数名** | **`snake_case`** | `contact_id`, `get_contact_list()` | 全小写下划线 |
-| **数据库表名 / 字段名** | snake_case | `contacts`, `phone_numbers`, `is_favorite` | 全小写下划线复数 |
+| **API Path (REST)** | kebab-case / Plural nouns | `/api/v1/contacts`, `/contacts/export` | Lowercase hyphens with unified prefix |
+| **JSON Fields** | **`snake_case`** | `is_favorite`, `social_accounts`, `created_at` | **Mandatory snake_case across all API contracts** |
+| **Vue Component Files** | PascalCase | `ContactList.vue`, `ContactDialog.vue` | Multi-word PascalCase |
+| **JS Variables / Functions** | **`camelCase`** | `contactList`, `fetchContacts()`, `isLoading` | Nouns for variables, verbs for functions |
+| **JS Constants** | UPPER_SNAKE_CASE | `API_TIMEOUT`, `DEFAULT_PAGE_SIZE` | All uppercase with underscores |
+| **Python Files / Modules** | snake_case | `contact_service.py`, `excel.py` | Lowercase with underscores |
+| **Python Classes** | PascalCase | `ContactModel`, `MockApiError` | PascalCase |
+| **Python Variables / Functions**| **`snake_case`** | `contact_id`, `get_contact_list()` | Lowercase with underscores |
+| **Database Tables / Columns** | snake_case | `contacts`, `phone_numbers`, `is_favorite` | Lowercase with underscores |
 
 ---
 
-## 四、Git 工作流与分支管理
+## 4. Git Workflow & Branch Strategy
 
 ```mermaid
 gitGraph
@@ -93,97 +92,93 @@ gitGraph
    merge frontend id: "PR: frontend feature merge"
 ```
 
-### 1. 分支架构说明
-- **`main`（稳定主分支）**：
-  - 受保护分支，对应随时可运行的稳定版本。
-  - **禁止直接向 `main` 分支执行 `git push`**。
-  - 所有改动必须通过 Pull Request 并经对方 Code Review 确认后方可合入。
-- **`frontend`（前端开发分支）**：前端日常开发的主线分支。
-- **`backend`（后端开发分支）**：后端日常开发的主线分支。
-- **特性分支（Feature Branches）**：
-  - 前端特性分支：`feat/frontend-<feature-name>`
-  - 后端特性分支：`feat/backend-<feature-name>`
-  - 缺陷修复分支：`fix/<bug-name>`
+### 4.1 Branch Architecture
+- **`main` (Stable Trunk)**:
+  - Protected release branch containing thoroughly verified code.
+  - Direct pushes to `main` are prohibited.
+  - All changes must merge via Pull Requests following peer review.
+- **`frontend` (Frontend Development)**: Primary branch for frontend implementation and UI assets.
+- **`backend` (Backend Development)**: Primary branch for Flask API, database models, and Excel handlers.
+- **Feature Branches**:
+  - `feat/frontend-<feature-name>`
+  - `feat/backend-<feature-name>`
+  - `fix/<bug-name>`
 
-### 2. 双人协作提交原则
-- 各自负责对应分支，避免在同一文件的同一区域并发修改造成不必要的代码冲突。
-- 保证本地提交前能够正常运行，不将有语法错误的代码推送到远端。
+### 4.2 Pair Collaboration Principles
+- Each developer owns their respective branch to prevent concurrent modifications to shared files.
+- Verify tests and local builds before pushing commits.
 
 ---
 
-## 五、Git Commit 提交规范
+## 5. Git Commit Guidelines
 
-必须采用 **[Conventional Commits](https://www.conventionalcommits.org/)** 标准格式：
+Commits must follow the **[Conventional Commits](https://www.conventionalcommits.org/)** specification:
 
 ```text
 <type>(<scope>): <subject>
 ```
 
-### 1. Type 类型定义
-- **`feat`**: 新增功能（如联系人列表展示、导出 Excel）
-- **`fix`**: 修复 Bug 或缺陷
-- **`docs`**: 仅文档改动（如更新 API 契约、协作规范）
-- **`style`**: 代码格式调整（空格、分号、格式化，不影响代码逻辑）
-- **`refactor`**: 代码重构（无新增功能亦无修复 Bug）
-- **`test`**: 增加或修改测试用例
-- **`chore`**: 构建配置、依赖管理、目录架构变动
+### 5.1 Commit Types
+- **`feat`**: New feature (e.g. contact list view, Excel export)
+- **`fix`**: Bug fix
+- **`docs`**: Documentation changes only (e.g. API contract updates)
+- **`style`**: Code formatting (spaces, semicolons; no business logic change)
+- **`refactor`**: Code refactoring (neither fixes a bug nor adds a feature)
+- **`test`**: Adding or modifying tests
+- **`chore`**: Build tool configuration, dependency updates, directory adjustments
 
-### 2. 规范示例
+### 5.2 Examples
 ```bash
-feat(backend): add contact multi-phone and email models
-feat(frontend): implement contact card and tag display
-fix(excel): fix openpyxl multi-line cell formatting issue
+feat(backend): implement address book APIs and Excel transfer
+feat(frontend): add complete Vue 3 frontend source and deployment config
+fix(excel): fix formula cell rejection during import
 docs: update API contract for xlsx export and import
-chore: add element-plus and vite proxy config
+style(frontend): remove user info from header
 ```
 
 ---
 
-## 六、Pull Request（PR）与代码审查规范
+## 6. Pull Request (PR) & Code Review Guidelines
 
-### 1. PR 流程要求
-1. **创建 PR**：
-   - 特性开发完毕后，向对应的主干分支（`frontend` / `backend`）或向 `main` 发起 PR。
-   - PR 标题必须符合 Commit 规范风格，如 `feat(backend): implement RESTful API for contacts`。
-2. **PR 描述模板**：
+### 6.1 PR Process
+1. **Creating a PR**:
+   - Open a PR from the development branch (`frontend` / `backend`) targeting `main`.
+   - The PR title must follow Conventional Commits format (e.g. `feat(backend): implement address book APIs and Excel transfer`).
+2. **PR Description Checklist**:
    ```markdown
-   ## 变更类型
-   - [ ] 新功能 (feat)
-   - [ ] 缺陷修复 (fix)
-   - [ ] 文档更新 (docs)
-   - [ ] 重构或依赖 (chore/refactor)
+   ## Type of Change
+   - [ ] Feature (feat)
+   - [ ] Bug fix (fix)
+   - [ ] Documentation (docs)
+   - [ ] Chore / Refactoring (chore/refactor)
 
-   ## 变更内容简述
-   - 说明本次 PR 实现的具体内容...
+   ## Summary of Changes
+   - Describe what this PR implements...
 
-   ## 自测情况
-   - [ ] 本地运行无报错
-   - [ ] API 契约已严格对照 docs/API.md
-   - [ ] 边界情况与异常处理已自测
+   ## Verification
+   - [ ] Local build / tests pass without errors
+   - [ ] Strict compliance with docs/API.md
+   - [ ] Edge cases and error handling validated
 
-   ## 影响范围与需对方配合事项
-   - 是否涉及 API 变更或配置改动...
+   ## Impact & Coordination
+   - Notes on configuration changes or migration requirements...
    ```
-3. **强制双人互审（Peer Review）**：
-   - 合并必须由另一位成员进行审查并批准（Approve）。
-   - 重点审查：是否违背 API 契约、代码可读性、是否存在未处理的异常。
+3. **Mandatory Peer Review**:
+   - Merging requires review and approval from the partner developer.
+   - Key review items: adherence to API contract, code readability, absence of unhandled exceptions, and comment language standards.
 
 ---
 
-## 七、规范确认状态与待确认事项
+## 7. Standards Alignment & Technical Decisions
 
-### 1. 【后端拟定基准】（待前端审阅）
-- 前端技术栈：Vue 3 + JavaScript + Element Plus + Vite。
-- 后端技术栈：Python Flask + SQLite + openpyxl。
-- 开发端口：前端 `5173` / 后端 `5000`，API 前缀统一 `/api/v1`，Vite Proxy 反向代理。
-- 命名约束：JSON 字段统一 `snake_case`；前端 JS 内部 `camelCase`；后端 Python 内部 `snake_case`。
-- 确立“契约优先”准则，修改接口必须先改 API.md 并双方同步。
-- Git 分支模型（main / frontend / backend）及 Conventional Commits 提交规范。
+### 7.1 Baseline Standards
+- Frontend: Vue 3 + JavaScript + Element Plus + Vite.
+- Backend: Python Flask + SQLite + openpyxl.
+- Ports: Frontend `5173` / Backend `5000`, unified API prefix `/api/v1`, Vite dev proxy.
+- Naming: `snake_case` for all JSON payloads and database columns; `camelCase` for JavaScript variables; `snake_case` for Python.
+- Git workflow: Separate `frontend` and `backend` development branches targeting `main` via PRs.
 
-### 2. 【待前端成员确认事项】（需双人协商确定）
-1. **JavaScript 代码格式化工具约定**：
-   - 是否在前端配置统一的 Prettier 规则（如单引号、无分号、trailingComma: "es5"）？
-2. **全局 UI 主题与布局模式**：
-   - Element Plus 采用左侧侧边栏导航还是顶部导航栏？联系人列表建议采用表格（`el-table`）还是卡片网格（`el-card`）展示？
-3. **分支合并策略约定**：
-   - PR 合并时统一选择 `Squash and merge`（合并为一个干净 commit）还是 `Create a merge commit`（保留完整历史）？
+### 7.2 Finalized Technical Agreements
+1. **Frontend Formatting**: 2-space indentation, single quotes, no unnecessary semicolons.
+2. **Layout & UI Pattern**: Responsive three-column layout (sidebar + table + detail drawer).
+3. **API Contract Enforcement**: Strict 8-field full replacement for `PUT /api/v1/contacts/{id}` returning HTTP 400 when editable fields are omitted.

@@ -1,0 +1,65 @@
+:root {
+  /* Brand and neutral colors */
+  --color-primary: #6883a0;
+  --color-primary-strong: #5b7691;
+  --color-primary-soft: #e9eef5;
+  --color-primary-tint: #f3f7fb;
+  --color-tag-bg: #eaeff6;
+  --color-tag-text: #5a7495;
+  --color-bg: #f6f7fa;
+  --color-surface: #ffffff;
+  --color-line: #eef1f5;
+  --color-line-strong: #e6eaf0;
+  --color-ink: #1f2733;
+  --color-ink-2: #3d4a59;
+  --color-ink-3: #6c7a8a;
+  --color-ink-4: #94a1b0;
+  --color-star: #5f7d9c;
+  --color-star-idle: #bcc7d3;
+  --skeleton-base: #eef2f7;
+  --color-avatar: #9fb2c6;
+  --color-avatar-detail: #7c97b5;
+  --color-danger: #bc625f;
+  --color-success-soft: #f3f8f4;
+  --color-danger-soft: #fcf0ef;
+
+  /* Shape and border radius */
+  --radius-card: 14px;
+  --radius-control: 8px;
+  --shadow-card: 0 2px 10px rgba(37, 53, 74, 0.045);
+
+  /* Typography */
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Segoe UI",
+    system-ui, -apple-system, sans-serif;
+
+  /* Layout dimensions */
+  --header-height: 82px;
+  --sidebar-width: 202px;
+  --detail-width: 300px;
+
+  /* Element Plus design token mappings */
+  --el-color-primary: var(--color-primary);
+  --el-color-primary-light-3: #8fa5bc;
+  --el-color-primary-light-5: #a8b9ca;
+  --el-color-primary-light-7: #c8d4e0;
+  --el-color-primary-light-8: #dae2ea;
+  --el-color-primary-light-9: var(--color-primary-soft);
+  --el-color-primary-dark-2: var(--color-primary-strong);
+  --el-color-danger: var(--color-danger);
+  --el-color-success: #6f9a7d;
+  --el-color-warning: #c2a06a;
+  --el-bg-color: var(--color-surface);
+  --el-bg-color-page: var(--color-bg);
+  --el-text-color-primary: var(--color-ink);
+  --el-text-color-regular: var(--color-ink-2);
+  --el-text-color-secondary: var(--color-ink-3);
+  --el-text-color-placeholder: var(--color-ink-4);
+  --el-border-color: var(--color-line-strong);
+  --el-border-color-light: var(--color-line);
+  --el-border-color-lighter: var(--color-line);
+  --el-fill-color-light: #f6f8fb;
+  --el-border-radius-base: var(--radius-control);
+  --el-font-family: var(--font-sans);
+  --el-font-size-base: 14px;
+  --el-mask-color: rgba(32, 44, 58, 0.32);
+}

@@ -54,12 +54,20 @@ venv.bak/
 instance/
 *.log
 
-# Excel temporary / generated data files
+# Excel data files (import templates and acceptance samples are tracked)
 *.xlsx
 *.xls
+!frontend/public/templates/*.xlsx
+!docs/acceptance/*.xlsx
 uploads/
 exports/
 temp/
+
+# Local temporary and tool directories
+.tmp/
+.tmp-dl/
+.pytest-tmp/
+tmpprobe/
 
 # IDE & Editors
 .vscode/

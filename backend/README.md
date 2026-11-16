@@ -1,47 +1,91 @@
 # Backend - EE308FZ-AddressBook
 
-使用 Flask、原生 sqlite3、Flask-CORS 和 openpyxl，实现联系人 CRUD、分页搜索、分组筛选、收藏及 Excel 导入导出。
+RESTful API backend service built with Python Flask, native `sqlite3`, Flask-CORS, and openpyxl, providing contact CRUD, search and filtering, pagination, favorite pinning, and Excel `.xlsx` import and export.
 
-在 `backend/` 目录下运行（Python 3.10+）：
+---
+
+## 1. Quick Start
+
+Run from the `backend/` directory (Python 3.10+ required):
 
 ```powershell
+# Windows PowerShell
 python -m venv .venv
-.\.venv\Scripts\python -m pip install -r requirements-dev.txt
-.\.venv\Scripts\python run.py
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+python run.py
+
+# Linux / macOS
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+python run.py
 ```
 
-服务地址为 `http://127.0.0.1:5000`，API 前缀为 `/api/v1`。首次启动自动建表，数据存储于 `backend/instance/address_book.sqlite3`，重启保留数据。前端继续使用 Vite Proxy；CORS 允许 `http://localhost:5173`。
+The service runs at `http://127.0.0.1:5000` with the API prefix `/api/v1`. Database tables are created automatically on first run and stored at `backend/instance/address_book.sqlite3`. Data persists across server restarts. CORS allows requests from `http://localhost:5173`.
 
-Vite Proxy 将 `/api` 请求转发至 `http://127.0.0.1:5000`，保留原路径；前端使用 `/api/v1/...` 相对地址。配置示例见 [API 文档第一节](../docs/API.md)。
+Vite dev proxy forwards `/api` requests to `http://127.0.0.1:5000` while preserving the request path; the frontend uses `/api/v1/...` relative endpoints. See [API Contract](../docs/API.md) for full configuration details.
 
-Linux / Render 部署时将服务根目录设为 `backend`，安装命令为 `pip install -r requirements.txt`，启动命令为 `gunicorn wsgi:app --bind 0.0.0.0:$PORT`。
-环境变量 `DATABASE` 指定 SQLite 文件路径（例如挂载持久磁盘下的 `/var/data/address_book.sqlite3`），父目录自动创建；`CORS_ORIGINS` 填前端实际来源，多个来源用英文逗号分隔。省略时仍使用本地开发默认配置。部署时须挂载持久磁盘以保留重启后的数据。
+---
 
-运行测试（使用独立的真实 SQLite 文件，不写入运行数据库）：
+## 2. Production Deployment
+
+When deploying to Linux or cloud platforms (e.g. Render Web Service):
+
+- Set the service root directory to `backend`.
+- Build command: `pip install -r requirements.txt`.
+- Start command: `gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 1 --threads 4`.
+
+**Environment Variables**:
+- `DATABASE`: Path to the SQLite database file (e.g., `/var/data/address_book.sqlite3` on a persistent disk mount). Parent directories are created automatically.
+- `CORS_ORIGINS`: Comma-separated list of allowed frontend origins (e.g., `https://addressbook-web.onrender.com`). Defaults to local development origins if omitted.
+
+To ensure data persistence across container redeployments, attach a persistent storage disk. See [Render Deployment Guide](../docs/DEPLOY_RENDER.md).
+
+---
+
+## 3. Running Automated Tests
+
+Tests execute against isolated, temporary SQLite databases without affecting development data:
 
 ```powershell
+# Windows PowerShell
 New-Item -ItemType Directory -Path instance -Force | Out-Null
 $testTemp = 'instance/pytest-' + [guid]::NewGuid().ToString('N')
 .\.venv\Scripts\python -m pytest tests -q --basetemp=$testTemp
+
+# Linux / macOS
+pytest tests -q
 ```
 
-指定项目内临时目录可避开 Windows 系统临时目录权限问题。
+Specifying a project-internal temporary directory avoids permission restrictions on Windows system temporary directories.
 
-PUT 必须包含全部 8 个可编辑字段，缺少任一字段返回 `400` 且不写入；显式提交 `[]` 或 `null` 清空对应字段。具体字段、默认值及响应结构见 [API 契约](../docs/API.md)。
+---
 
-Excel 接口：
+## 4. API Contract & Validation Rules
 
-- `GET /api/v1/contacts/export`：按 `keyword`、`group`、`is_favorite` 筛选全部联系人，忽略分页；返回 `.xlsx` 二进制下载。
-- `POST /api/v1/contacts/import`：以 multipart 字段 `file` 上传不超过 10 MB 的 `.xlsx`，第一张工作表须包含契约规定的固定八列表头。全空行跳过，错误行计入统计，重复导入新增记录。
-- 每行联系人及子项在一个事务中写入。数据库内部故障返回 500，当前行回滚并停止；此前已成功的行保留。文件格式及大小错误返回 `400 INVALID_FILE`。
-- 导出公式样式的文本仍写为字符串；导入实际公式单元格时拒绝该行，不执行或读取公式缓存值。
+- **PUT Full Update Contract**: The `PUT /api/v1/contacts/{id}` endpoint requires all 8 editable fields (`name`, `group`, `is_favorite`, `notes`, `phones`, `emails`, `social_accounts`, `addresses`). Omitting any editable field returns `400 VALIDATION_ERROR` and performs no database write. To clear optional fields, explicitly pass `null` (for `group` and `notes`) or `[]` (for list fields).
+- **Phone Number Format**: Phone numbers are validated against `^[0-9+()\-]+$`. Whitespace characters are disallowed.
 
-Excel 往返限制（沿用现有契约，不增加转义或隐藏字段）：
+---
 
-- 标准数据、多联系方式、收藏及每类恰好一个主标记可保留；新 ID 和时间戳重新生成。
-- 同类主标记全为 false 时，导入会将首项设为 true；多个 true 时只保留首个。
-- 单元格无换行时，分号会拆项，例如单个地址 `园区;A座` 会变成两个地址；有多项换行时，项内分号保留。
-- 项内换行会被拆项，标签或平台中的冒号会被当作分界，标签末尾的 `*` 会被当作主标记。值内冒号（如已带平台标签的 HTTPS 链接）保留。
-- 空字符串与 null 在空单元格中无法区分。超过 Excel 单元格 32767 字符或包含 XML 禁用控制字符的文本导出返回 400，避免静默截断。
+## 5. Excel Import and Export Specifications
 
-因此当前格式不能承诺任意合法 API 数据无损往返；需要消除这些歧义时，须先协商更新契约。
+- **Export (`GET /api/v1/contacts/export`)**: Filters contacts by `keyword`, `group`, and `is_favorite`, ignoring pagination. Returns a `.xlsx` binary spreadsheet.
+- **Import (`POST /api/v1/contacts/import`)**: Accepts a `.xlsx` file upload up to 10 MB via the `file` multipart field. The first worksheet must contain the fixed 8-column header defined in the contract. Empty rows are skipped; validation errors are aggregated in the response; repeated imports insert new records.
+- **Transaction Safety**: Each contact row and its sub-entries are committed in a dedicated transaction. Internal database errors return HTTP 500, rollback the current row, and abort further processing; previously committed rows remain preserved. Invalid file formats or size overruns return `400 INVALID_FILE`.
+- **Formula Handling**: Formula-like text in exports is sanitized to plain strings. During import, actual formula cells are rejected per-row to protect against formula injection.
+
+---
+
+## 6. Known Limitations (Excel Round-Trip)
+
+Consistent with the frozen API contract, no artificial escape markers or hidden columns are introduced:
+
+- Standard contact attributes, multiple entries, favorite flags, and single primary flags are preserved. New record IDs and timestamps are generated upon import.
+- When all primary flags in a category are false, import assigns `is_primary=true` to the first entry. If multiple entries are marked primary, only the first is retained.
+- In cells without line breaks, semicolons act as delimiters (e.g. an address `Campus;Building A` splits into two addresses). Inside multi-line cells, semicolons within an item line are preserved.
+- Line breaks inside a cell delimit items. Colons distinguish labels/platforms from values, and trailing `*` marks primary items. Colons within values (e.g. HTTPS URLs) are preserved.
+- Empty strings and nulls cannot be distinguished in empty Excel cells. Text exceeding Excel's 32,767 character cell limit or containing XML control characters causes export to return HTTP 400 to prevent silent truncation.
+
+Consequently, the current format cannot guarantee lossless round-trips for arbitrary valid API payloads. Eliminating these ambiguities would require a coordinated update to the API contract.
