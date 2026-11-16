@@ -95,8 +95,10 @@ commit, then integrated with the backend branch through pull requests.*
 
 | Contributor | Role | Commits | Lines added | Lines deleted |
 | --- | --- | ---: | ---: | ---: |
-| Ye Jiahui (`JiahuiYe-FZU`) | Backend + integration | 9 | ≈ 3,540 | ≈ 1,150 |
-| Zhang Sufang (`KleinZhang168`) | Frontend | 4 | ≈ 9,200 | ≈ 30 |
+| Ye Jiahui (`JiahuiYe-FZU`) | Backend + integration | 9 | 3,543 | 1,148 |
+| Zhang Sufang (`KleinZhang168`) | Frontend | 4 | 9,550 | 254 |
+
+*Statistics captured on 2026-11-16 23:20 (UTC+8) at commit `3938164`; merge commits are excluded.*
 
 ![Commits authored by KleinZhang168](blog/github-commits-zhang.png)
 
