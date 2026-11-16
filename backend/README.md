@@ -87,3 +87,5 @@ Consistent with the frozen API contract, no artificial escape markers or hidden 
 - In cells without line breaks, semicolons act as delimiters (e.g. an address `Campus;Building A` splits into two addresses). Inside multi-line cells, semicolons within an item line are preserved.
 - Line breaks inside a cell delimit items. Colons distinguish labels/platforms from values, and trailing `*` marks primary items. Colons within values (e.g. HTTPS URLs) are preserved.
 - Empty strings and nulls cannot be distinguished in empty Excel cells. Text exceeding Excel's 32,767 character cell limit or containing XML control characters causes export to return HTTP 400 to prevent silent truncation.
+
+Consequently, the current format cannot guarantee lossless round-trips for arbitrary valid API payloads. Eliminating these ambiguities would require a coordinated update to the API contract.
