@@ -399,8 +399,8 @@
 > [!WARNING]
 > **更新规则说明**：  
 > 1. 客户端提交时必须提供所有可编辑字段（`name`, `group`, `is_favorite`, `notes`, `phones`, `emails`, `social_accounts`, `addresses`）。  
-> 2. 若请求体中省略或缺失 `phones`、`emails`、`social_accounts`、`addresses` 数组，后端将视为将其清空（重置为空数组 `[]`）。  
-> 3. 若省略 `group` 或 `notes`，后端将重置为 `null`；省略 `is_favorite` 将重置为 `false`。  
+> 2. 缺少任一可编辑字段时返回 `400 VALIDATION_ERROR`，且不修改已有数据；清空联系方式须显式提交相应空数组 `[]`。
+> 3. 清空 `group` 或 `notes` 须显式提交 `null`；取消收藏须显式提交 `is_favorite: false`。
 > 4. 若仅需切换收藏状态，请使用专用的 `PATCH /contacts/{id}/favorite` 接口，禁止使用 `PUT` 做局部字段更新。
 
 - **请求方法**：`PUT`
