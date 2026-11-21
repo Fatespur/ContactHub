@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Fatespur/ContactHub/actions/workflows/ci.yml/badge.svg)](https://github.com/Fatespur/ContactHub/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://www.python.org/)
+[![Python: 3.11+](https://img.shields.io/badge/Python-3.11%2B-brightgreen.svg)](https://www.python.org/)
 [![Flask: 3.1](https://img.shields.io/badge/Flask-3.1-black.svg)](https://flask.palletsprojects.com/)
 [![Vue: 3.5+](https://img.shields.io/badge/Vue-3.5%2B-4FC08D.svg)](https://vuejs.org/)
 [![Vite: 7](https://img.shields.io/badge/Vite-7.x-646CFF.svg)](https://vitejs.dev/)
@@ -168,7 +168,7 @@ ContactHub/
 
 ### 5.1 环境需求
 
-- **Python**: 推荐 `3.10` 及以上版本（后端测试已在 GitHub Actions CI 中通过 **Python 3.10、3.11、3.12、3.13 全版本矩阵** 验证；本地基准运行环境为 Python 3.13.6）
+- **Python**: 要求 `3.11` 及以上版本（后端测试已在 GitHub Actions CI 中通过 **Python 3.11、3.12、3.13 真实版本矩阵** 验证全部通过；因测试套件与契约校验严格遵循 Python 3.11+ 原生 ISO-8601 'Z' 格式解析规范，不支持 Python 3.10；本地基准开发环境为 Python 3.13.6）
 - **Node.js**: `20.19+` 或 `22.12+`（适配 Vite 7 生产构建）
 - **npm**: `10.0+`
 
