@@ -313,9 +313,13 @@ a deployment should be.
 
 ---
 
-## 10. Appendix
+## 10. Appendix & Authorization Status
 
 - API contract: [docs/API.md](API.md)
 - Coding standards: [docs/CODING_STANDARDS.md](CODING_STANDARDS.md)
 - Deployment guide: [docs/DEPLOY_RENDER.md](DEPLOY_RENDER.md)
 - Acceptance checklist: [docs/ACCEPTANCE.md](ACCEPTANCE.md)
+
+### Authorization & Upstream Lineage Note
+ContactHub is an engineering evolution of the initial academic pair-programming repository `EE308FZ-AddressBook`. 
+While this standalone release is maintained under the MIT License by Fatespur, formal written confirmation or a CLA from original contributors (Ye Jiahui and Zhang Sufang) remains an open administrative item for unrestricted commercial redistribution. All original commits and attributions are faithfully preserved.
