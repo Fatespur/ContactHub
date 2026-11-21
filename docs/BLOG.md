@@ -3,15 +3,18 @@
 | | |
 | --- | --- |
 | **Project** | ContactHub · Architecture & Engineering Practice Review |
-| **Author** | Fatespur |
+| **Original Team** | Ye Jiahui (backend & architecture, [JiahuiYe-FZU](https://github.com/JiahuiYe-FZU)) · Zhang Sufang (frontend & UI/UX, [KleinZhang168](https://github.com/KleinZhang168)) |
+| **Maintenance & Evolution** | Fatespur ([Fatespur](https://github.com/Fatespur)) |
 | **Version** | v1.0.0 Release Milestone |
 | **Repository** | <https://github.com/Fatespur/ContactHub> |
 
-> This post covers the project architecture, design evolution, commit statistics, implementation ideas, running screenshots, technical challenges and engineering reflections.
+> This post reviews the project architecture, design evolution, commit history, implementation ideas, running screenshots, technical challenges, and reflections from the initial pair-programming delivery through to its current standalone open-source release.
 
-## Project Background & Architecture Goals
+## Project Background & Lineage
 
-ContactHub is designed as a production-ready, decoupled address book and contact data exchange system. The core architecture requirements include:
+ContactHub originated as a software engineering pair-programming project (`EE308FZ-AddressBook`), developed collaboratively by Ye Jiahui and Zhang Sufang. The project was subsequently reorganized, localized into full Simplified Chinese, hardened with automated CI/CD and security reviews, and released as the standalone open-source project **ContactHub** maintained by Fatespur.
+
+The core architecture requirements include:
 - **Contact Lifecycle Management**: robust CRUD operations with multi-attribute contact methods.
 - **Data Exchange**: bidirectional, standard 8-column Excel (`.xlsx`) bulk import and export with formula injection protection.
 - **Enterprise UI/UX**: responsive layouts (desktop 3-column, tablet drawer), instant debounced search, and keyboard accessibility.
@@ -20,15 +23,15 @@ ContactHub is designed as a production-ready, decoupled address book and contact
 ## Contents
 
 1. [Project Address and Links](#1-project-address-and-links)
-2. [Module Architecture & Responsibilities](#2-module-architecture--responsibilities)
-3. [Commit History and Development Statistics](#3-commit-history-and-development-statistics)
+2. [Module Architecture & Division of Responsibilities](#2-module-architecture--division-of-responsibilities)
+3. [Commit History and Contribution Statistics](#3-commit-history-and-contribution-statistics)
 4. [Functional Implementation Ideas (Frontend)](#4-functional-implementation-ideas-frontend)
 5. [Screenshots of the Running System](#5-screenshots-of-the-running-system)
 6. [Demo Video](#6-demo-video)
 7. [Engineering Phase & Time Metrics](#7-engineering-phase--time-metrics)
-8. [Technical Challenges and How They Were Resolved](#8-technical-challenges-and-how-they-were-resolved)
+8. [Cooperation Difficulties and How We Resolved Them](#8-cooperation-difficulties-and-how-we-resolved-them)
 9. [Reflections](#9-reflections)
-10. [Appendix](#10-appendix)
+10. [Appendix & Authorization Status](#10-appendix--authorization-status)
 
 ---
 
@@ -37,39 +40,37 @@ ContactHub is designed as a production-ready, decoupled address book and contact
 | Item | Link |
 | --- | --- |
 | GitHub repository | <https://github.com/Fatespur/ContactHub> |
+| Upstream lineage repository | <https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook> |
 | API contract | [docs/API.md](API.md) |
 | Coding standards | [docs/CODING_STANDARDS.md](CODING_STANDARDS.md) |
 | Deployment guide | [docs/DEPLOY_RENDER.md](DEPLOY_RENDER.md) |
 | Frontend module | [frontend/](../frontend) |
 | Backend module | [backend/](../backend) |
 
-The application is a **decoupled** (separate frontend and backend) address book. The frontend is a Vue 3 SPA
-served by a Render **Static Site**; the backend is a Flask REST service running under **gunicorn** on a Render
-**Web Service**. Both are built from the same repository but from different branches (`frontend` / `backend`)
-and later merged into `main` through pull requests.
+The application is a **decoupled** address book system. The frontend is a Vue 3 SPA served as a Static Site; the backend is a Flask REST service running under gunicorn.
 
 ---
 
-## 2. Module Architecture & Responsibilities
+## 2. Module Architecture & Division of Responsibilities
 
-| Module | Core Tech | Scope of Implementation |
+| Module | Core Tech | Original Ownership & Responsibilities |
 | --- | --- | --- |
-| **Frontend Application** | Vue 3 · Vite 7 · Element Plus | UI/UX implementation, component hierarchy, responsive views, reactive store, Mock data service, multi-attribute contact form with dirty checking, and Excel import/export UI. |
-| **Backend Service** | Flask · SQLite · openpyxl | RESTful API endpoints (/api/v1/contacts), parameterized SQL queries, foreign key cascade constraints, transactional full PUT update, and formula injection-safe Excel streaming. |
-| **Testing & CI/CD** | pytest · npm build | 65 automated tests covering API contracts, Chinese CRUD, multi-field search, Excel data consistency, and production Vite bundle verification. |
+| **Frontend Application** | Vue 3 · Vite 7 · Element Plus | **Zhang Sufang**: UI/UX design & implementation, Vue 3 component architecture, reactive state store, mock data service, multi-attribute contact form with dirty checking, and Excel import/export UI. |
+| **Backend Service** | Flask · SQLite · openpyxl | **Ye Jiahui**: API contract (`docs/API.md`), Flask application factory, SQLite schema and parameterized data access, foreign key cascade constraints, full PUT replacement, and safe Excel streaming. |
+| **Testing & CI/CD** | pytest · Vite build · GitHub Actions | **Shared / Fatespur**: 65 automated pytest suites covering API contracts, Chinese CRUD, multi-field search, Excel data consistency, and production Vite bundle verification. |
 
 Interface-first design: the API contract was specified and validated before full UI wiring, so the frontend could be developed against a mock layer and connected to the real Flask service with zero component modifications.
 
 ---
 
+<a id="3-commit-history-and-development-statistics"></a><a id="3-commit-history-and-contribution-statistics"></a>
 ## 3. Commit History and Contribution Statistics
 
 ### 3.1 Commit history
 
 ![GitHub commit history of the frontend branch](blog/github-commits-frontend.png)
 
-*Figure 1 — Commit history of the `frontend` branch. The frontend source was imported in a single feature
-commit, then integrated with the backend branch through pull requests.*
+*Figure 1 — Commit history of the `frontend` branch. The frontend source was imported in a feature commit, then integrated with the backend branch through pull requests.*
 
 ### 3.2 Contributor statistics
 
@@ -77,22 +78,25 @@ commit, then integrated with the backend branch through pull requests.*
 
 *Figure 2 — GitHub Insights → Contributors (commits to `main`, merge commits excluded).*
 
-| Contributor | Role | Commits | Lines added | Lines deleted |
+| Contributor | Historical Role in Project | Commits | Lines added | Lines deleted |
 | --- | --- | ---: | ---: | ---: |
-| Fatespur | Author / Full-stack | 13 | 13,093 | 1,402 |
+| Ye Jiahui (`JiahuiYe-FZU`) | Backend architecture & integration | 9 | 3,543 | 1,148 |
+| Zhang Sufang (`KleinZhang168`) | Frontend UI/UX & components | 4 | 9,550 | 254 |
+| Fatespur (`Fatespur`) | Refactoring, Chinese localization & maintenance | - | - | - |
 
 *Statistics captured on 2026-11-16 23:20 (UTC+8) at commit `3938164`; merge commits are excluded.*
 
+![Commits authored by Zhang Sufang](blog/github-commits-zhang.png)
 
-*Figure 3 — Commits authored by the frontend developer.*
+*Figure 3 — Commits authored by the frontend developer (Zhang Sufang).*
 
-**Repository totals:** `main` contains both modules and the merge commits of three pull requests; four branches
-exist (`main`, `frontend`, `backend`, `fix/backend-deployment`). The commit counts in the table above are the
-non-merge commits reported by GitHub Insights.
+**Repository totals:** `main` contains both modules and the merge commits of pull requests; four branches exist (`main`, `frontend`, `backend`, `fix/backend-deployment`). The commit counts in the table above are the non-merge commits reported by GitHub Insights.
 
 > Note on commit granularity: the 41-file frontend module was originally delivered as one large commit
 > (`feat(frontend): add complete Vue 3 frontend source and deployment config`). Follow-up work — the cold-start
 > timeout fix, deployment links in the README, and this article — is committed separately, which makes the
+> per-contributor history a better reflection of the ongoing work. This was one of the process lessons of the
+> project (see Section 8).
 > per-contributor history a better reflection of the ongoing work. This was one of the process lessons of the
 > project (see Section 8).
 
@@ -252,7 +256,7 @@ Suggested 3-minute recording script (covers every graded feature):
 | Development | Coding (Flask API, Excel service) | 10.0 | 31.3 |
 | Development | Code review | 1.5 | 4.7 |
 | Development | Test plan | 1.0 | 3.1 |
-| Development | Testing (60 pytest cases) | 5.0 | 15.6 |
+| Development | Testing (65 pytest cases) | 5.0 | 15.6 |
 | Deployment | WSGI, gunicorn, environment configuration | 2.0 | 6.3 |
 | Record Time Spent | Time log | 0.5 | 1.6 |
 | Postmortem | Summary | 0.5 | 1.6 |
@@ -260,6 +264,7 @@ Suggested 3-minute recording script (covers every graded feature):
 
 ---
 
+<a id="8-technical-challenges-and-how-they-were-resolved"></a><a id="8-cooperation-difficulties-and-how-we-resolved-them"></a>
 ## 8. Cooperation Difficulties and How We Resolved Them
 
 1. **Branch strategy disagreement.** We first created an integration branch (`dev`) containing both modules, but
@@ -310,9 +315,26 @@ a deployment should be.
 
 ---
 
-## 10. Appendix
+<a id="10-appendix"></a><a id="10-appendix--authorization-status"></a>
+## 10. Appendix & Authorization Status
 
 - API contract: [docs/API.md](API.md)
 - Coding standards: [docs/CODING_STANDARDS.md](CODING_STANDARDS.md)
 - Deployment guide: [docs/DEPLOY_RENDER.md](DEPLOY_RENDER.md)
 - Acceptance checklist: [docs/ACCEPTANCE.md](ACCEPTANCE.md)
+
+### Authorization & Maintainer License Clearance Checklist
+ContactHub is an engineering evolution of the initial academic pair-programming repository `EE308FZ-AddressBook`. 
+The upstream project did not include an explicit `LICENSE` file. Because this repository contains code authored by different contributors, rights attribution must be handled rigorously.
+
+Until the following manual clearances are obtained, **this project does not claim that MIT relicensing is fully effective across all historical assets**:
+
+| Item | Covered Assets | Original Rights Holder | Clearance Scope | Current Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **Maintainer Codebase** | `backend/` application logic, test suites, CI workflows, scripts, docs & refactoring | **Ye Jiahui / Fatespur** (same maintainer, different GitHub accounts) | Maintainer confirms and grants MIT license across his historical and evolution codebase | 🟢 Authorized (Maintainer) |
+| **Frontend Codebase** | `frontend/src/`, components, styles authored during pair programming | **Zhang Sufang** ([@KleinZhang168](https://github.com/KleinZhang168)) | Affirm agreement to license historical frontend code under MIT with rights to modify and redistribute | 🟡 Pending manual confirmation (Issue / Email / CLA) |
+
+> **Rights Attribution & Compliance Notes:**
+> 1. `JiahuiYe-FZU` and `Fatespur` represent the same maintainer's different GitHub accounts and are not redundantly counted as independent parties requiring authorization.
+> 2. For codebase assets authored by the other contributor (**Zhang Sufang**), in the absence of explicit authorization evidence, **the project strictly maintains the status of authorization incomplete / pending**, and never marks them as authorized unilaterally.
+> 3. All original commit histories and author attributions are strictly and faithfully preserved without rewrite.

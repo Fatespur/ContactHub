@@ -1,7 +1,8 @@
 # 联系人管理与数据交换系统 (ContactHub)
 
+[![CI](https://github.com/Fatespur/ContactHub/actions/workflows/ci.yml/badge.svg)](https://github.com/Fatespur/ContactHub/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://www.python.org/)
+[![Python: 3.11+](https://img.shields.io/badge/Python-3.11%2B-brightgreen.svg)](https://www.python.org/)
 [![Flask: 3.1](https://img.shields.io/badge/Flask-3.1-black.svg)](https://flask.palletsprojects.com/)
 [![Vue: 3.5+](https://img.shields.io/badge/Vue-3.5%2B-4FC08D.svg)](https://vuejs.org/)
 [![Vite: 7](https://img.shields.io/badge/Vite-7.x-646CFF.svg)](https://vitejs.dev/)
@@ -10,6 +11,8 @@
 ContactHub（联系人管理与数据交换系统）是一套基于现代 Web 前后端分离架构设计的专业通讯录与联系人数据交换中台。系统聚焦于多属性联系人生命周期管理、结构化数据组织、全字段实时检索以及企业级规范的 Excel（`.xlsx`）双向数据批量交换。
 
 本项目采用全栈工程化架构设计，前端提供全要素简体中文交互界面，后端具备完备的 UTF-8 中文字符集支持与企业级数据校验能力。
+
+> **项目源起与演进说明**：本项目最初源自软件工程结对编程项目（福州大学 EE308FZ 课程项目 `EE308FZ-AddressBook`，由 Ye Jiahui 负责后端架构与接口设计、Zhang Sufang 负责前端界面与交互实现）；后续由 Fatespur 进行工程化演进、全要素中文化重构、安全加固与持续维护，升级为独立的 ContactHub 开源项目。
 
 ---
 
@@ -26,7 +29,7 @@ ContactHub（联系人管理与数据交换系统）是一套基于现代 Web �
 - [9. 自动化测试](#9-自动化测试)
 - [10. 部署指南](#10-部署指南)
 - [11. 项目截图](#11-项目截图)
-- [12. 开源协议与作者](#12-开源协议与作者)
+- [12. 开源协议、项目团队与授权确认清单](#12-开源协议项目团队与授权确认清单)
 
 ---
 
@@ -165,8 +168,8 @@ ContactHub/
 
 ### 5.1 环境需求
 
-- **Python**: `3.10` 及以上版本（在 3.10、3.11、3.12、3.13 均验证通过）
-- **Node.js**: `20.19+` 或 `22.12+`（适配 Vite 7）
+- **Python**: 推荐 `3.11` 及以上版本。当前完整自动化测试套件（65 项单元与集成测试）在 GitHub Actions CI 中通过 **Python 3.11、3.12、3.13 真实版本矩阵** 验证全部通过。在 Python 3.10 环境下，由于测试套件（`backend/tests/test_api.py`）使用了 Python 3.11+ 标准库 `datetime.fromisoformat()` 解析以 `'Z'` 结尾的 ISO-8601 时间戳，测试套件会抛出 `ValueError`；在未经进一步运行验证的情况下，不应武断判定后端业务代码必然不兼容 Python 3.10，但建议优先使用已获完整 CI 矩阵验证的 Python 3.11–3.13 环境（本地基准开发环境为 Python 3.13.6）。
+- **Node.js**: `20.19+` 或 `22.12+`（适配 Vite 7 生产构建）
 - **npm**: `10.0+`
 
 ---
@@ -443,6 +446,17 @@ dist/assets/index-CzG1Q3y2.js          1,173.75 kB │ gzip: 388.07 kB
 
 ---
 
+### 10.3 安全与数据隐私声明 (公网演示与安全边界)
+
+> [!CAUTION]
+> **公开演示与数据安全核心声明**  
+> 1. **公开演示首选纯 Mock 模式**：本仓库默认支持免后端的纯静态演示模式（在前端环境变量中配置 `VITE_USE_MOCK=true`）。公开网页演示强烈建议启用纯 Mock 模式，所有交互与数据完全在浏览器前端内存中模拟，彻底消除真实后端暴露与数据泄露风险。
+> 2. **CORS 绝非访问控制或身份鉴权凭证**：跨域资源共享（CORS）仅是现代浏览器遵循的客户端同源策略，**绝不等于服务端身份鉴权或访问控制（Authentication / Authorization）**。任何外部人员均可通过 curl、Postman、自动化脚本等非浏览器客户端直接请求后端 API，配置 CORS 白名单不能作为系统安全防护已到位的证据。
+> 3. **无鉴权 CRUD 接口安全限制**：系统当前定位为全栈工程演示与教学实验中台，未引入用户登录、Token 鉴权及 RBAC 角色体系。若公开部署真实后端，**严禁录入任何真实个人敏感数据**（姓名、手机号、真实地址等），必须明确向访问者告知系统处于公开无鉴权状态，建议配合自动销毁的临时实例或定期数据重置机制。
+> 4. **企业生产部署加固要求**：如需在生产环境落地，必须在前置反向代理网关层（如 Nginx / API Gateway）增加统一身份认证（OAuth 2.0 / JWT / mTLS）与网络隔离，并使用持久化加密数据卷。
+
+---
+
 ## 11. 项目截图
 
 | 界面描述 | 预览效果 |
@@ -456,7 +470,23 @@ dist/assets/index-CzG1Q3y2.js          1,173.75 kB │ gzip: 388.07 kB
 
 ---
 
-## 12. 开源协议与作者
+<a id="12-开源协议与作者"></a><a id="12-开源协议项目团队与授权确认清单"></a>
+## 12. 开源协议、项目团队与授权确认清单
 
-- **项目作者**：Fatespur
-- **开源协议**：本项目基于 [MIT License](LICENSE) 协议发布，欢迎交流与使用。
+- **项目团队与历史贡献**：
+  - **Ye Jiahui / Fatespur** ([GitHub @JiahuiYe-FZU](https://github.com/JiahuiYe-FZU) / [GitHub @Fatespur](https://github.com/Fatespur))：项目维护者（同一维护者的不同 GitHub 账号）。结对编程时期负责后端 API 契约制定、Flask 架构、SQLite 数据持久化、openpyxl Excel 数据流转与自动化测试套件；后续以 Fatespur 账号主导全要素中文化重构、工程化迁移解耦、CI 多版本流水线配置与安全加固。
+  - **Zhang Sufang** ([GitHub @KleinZhang168](https://github.com/KleinZhang168))：结对编程共同作者，负责前端整体 UI/UX 架构、Vue 3 组件库设计、Pinia 响应式状态管理、表单脏检查与动态错误映射。
+
+### 维护者人工授权确认清单 (Maintainer Manual License Clearance Checklist)
+
+原始结对项目仓库（`EE308FZ-AddressBook`）在开发初期未包含显式的 LICENSE 文件。由于项目中包含不同贡献者的历史代码资产，必须严格界定权利归属，不得单方面假设已取得共同作者的全量开源授权。在完成以下人工确认前，**本项目不声称整个项目的 MIT 再授权已完全生效**：
+
+| 待确认项目 | 涉及代码范围 | 原权利人 | 待确认许可内容 | 确认状态 |
+| :--- | :--- | :--- | :--- | :---: |
+| **维护者代码（后端及演进重构）** | `backend/` 业务代码、测试套件、CI 流水线、工程配置与文档重构 | **Ye Jiahui / Fatespur**（同一维护者的不同 GitHub 账号） | 维护者完全授权并同意将其编写的代码以 MIT License 开源及后续分发 | 🟢 已授权 (维护者本人) |
+| **共同贡献者代码（前端初始架构）** | 结对编程阶段由 Zhang Sufang 编写的 `frontend/src/` 初始页面组件及样式 | **Zhang Sufang** ([@KleinZhang168](https://github.com/KleinZhang168)) | 确认同意将其编写的前端代码以 MIT License 形式开源并允许后续修改与分发 | 🟡 待人工确认 (Issue / 邮件 / CLA) |
+
+> **权利归属与合规边界说明**：
+> 1. **账号同人界定**：`JiahuiYe-FZU` 与 `Fatespur` 属于同一维护者的不同 GitHub 账号，其名下代码资产已由维护者本人确认遵循 MIT License 开放，不重复计算为独立的待授权人员。
+> 2. **独立贡献者授权未完成**：对于共同作者 Zhang Sufang 拥有著作权的历史前端代码资产，在未取得其正式授权证据前，**必须严格维持授权未完成的判断，本项目绝不单方面标记为已授权**。
+> 3. **历史真实性承诺**：本项目严禁且绝不删除原始贡献者的 Git 提交记录，绝不改写历史 commit 签名。当前仓库顶层的 [LICENSE](LICENSE) 文件代表维护者自身工作成果的开源意向；若原共同作者对开源许可提出异议，维护者承诺按原作者意愿进行协议调整或代码剥离重写。
