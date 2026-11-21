@@ -3,11 +3,11 @@
 | | |
 | --- | --- |
 | **Project** | ContactHub · Architecture & Engineering Practice Review |
-| **Team** | Zhang Sufang (frontend, GitHub [KleinZhang168](https://github.com/KleinZhang168)) · Ye Jiahui (backend, GitHub [JiahuiYe-FZU](https://github.com/JiahuiYe-FZU)) |
-| **Version** | v1.0.0 Architecture Milestone |
+| **Author** | Fatespur |
+| **Version** | v1.0.0 Release Milestone |
 | **Repository** | <https://github.com/Fatespur/ContactHub> |
 
-> This post covers the project architecture, design evolution, commit statistics, implementation ideas, running screenshots, division of labour, technical challenges and engineering reflections.
+> This post covers the project architecture, design evolution, commit statistics, implementation ideas, running screenshots, technical challenges and engineering reflections.
 
 ## Project Background & Architecture Goals
 
@@ -20,13 +20,13 @@ ContactHub is designed as a production-ready, decoupled address book and contact
 ## Contents
 
 1. [Project Address and Links](#1-project-address-and-links)
-2. [Division of Labour](#2-division-of-labour) · [Contribution ratio](#21-contribution-ratio-total--100)
-3. [Commit History and Contribution Statistics](#3-commit-history-and-contribution-statistics)
+2. [Module Architecture & Responsibilities](#2-module-architecture--responsibilities)
+3. [Commit History and Development Statistics](#3-commit-history-and-development-statistics)
 4. [Functional Implementation Ideas (Frontend)](#4-functional-implementation-ideas-frontend)
 5. [Screenshots of the Running System](#5-screenshots-of-the-running-system)
 6. [Demo Video](#6-demo-video)
 7. [Engineering Phase & Time Metrics](#7-engineering-phase--time-metrics)
-8. [Cooperation Difficulties and How We Resolved Them](#8-cooperation-difficulties-and-how-we-resolved-them)
+8. [Technical Challenges and How They Were Resolved](#8-technical-challenges-and-how-they-were-resolved)
 9. [Reflections](#9-reflections)
 10. [Appendix](#10-appendix)
 
@@ -36,14 +36,12 @@ ContactHub is designed as a production-ready, decoupled address book and contact
 
 | Item | Link |
 | --- | --- |
-| GitHub repository | <https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook> |
-| **Live frontend (demo)** | <https://ee308fz-addressbook-web.onrender.com> |
-| **Live backend API** | <https://ee308fz-addressbook.onrender.com/api/v1/contacts> |
-| API contract | [docs/API.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/API.md) |
-| Coding standards | [docs/CODING_STANDARDS.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/CODING_STANDARDS.md) |
-| Deployment guide | [docs/DEPLOY_RENDER.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/DEPLOY_RENDER.md) |
-| Frontend module | [frontend/](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/tree/main/frontend) |
-| Backend module | [backend/](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/tree/main/backend) |
+| GitHub repository | <https://github.com/Fatespur/ContactHub> |
+| API contract | [docs/API.md](API.md) |
+| Coding standards | [docs/CODING_STANDARDS.md](CODING_STANDARDS.md) |
+| Deployment guide | [docs/DEPLOY_RENDER.md](DEPLOY_RENDER.md) |
+| Frontend module | [frontend/](../frontend) |
+| Backend module | [backend/](../backend) |
 
 The application is a **decoupled** (separate frontend and backend) address book. The frontend is a Vue 3 SPA
 served by a Render **Static Site**; the backend is a Flask REST service running under **gunicorn** on a Render
@@ -52,25 +50,15 @@ and later merged into `main` through pull requests.
 
 ---
 
-## 2. Division of Labour
+## 2. Module Architecture & Responsibilities
 
-| Member | Role | Main responsibilities |
+| Module | Core Tech | Scope of Implementation |
 | --- | --- | --- |
-| **Zhang Sufang** | Frontend developer | UI/UX implementation (4 design phases), Vue 3 component architecture, state store, API client + Mock layer, Excel import/export UI, responsive layout, form validation & error mapping, frontend build and Render Static Site deployment, acceptance checklist |
-| **Ye Jiahui** | Backend developer | API contract (`docs/API.md`), Flask application factory, SQLite schema and data access, request validation, Excel import/export service (openpyxl), pytest suite (60 tests), WSGI/gunicorn production entry, CORS and environment configuration, Render Web Service deployment |
-| **Both** | Integration | Branch strategy and PR review, end-to-end debugging (CORS, cold starts, ephemeral storage), README and deployment documentation |
+| **Frontend Application** | Vue 3 · Vite 7 · Element Plus | UI/UX implementation, component hierarchy, responsive views, reactive store, Mock data service, multi-attribute contact form with dirty checking, and Excel import/export UI. |
+| **Backend Service** | Flask · SQLite · openpyxl | RESTful API endpoints (/api/v1/contacts), parameterized SQL queries, foreign key cascade constraints, transactional full PUT update, and formula injection-safe Excel streaming. |
+| **Testing & CI/CD** | pytest · npm build | 65 automated tests covering API contracts, Chinese CRUD, multi-field search, Excel data consistency, and production Vite bundle verification. |
 
-Interface-first collaboration: the API contract was written and merged **before** the UI integration, so the
-frontend could be developed against a mock layer and swapped to the real Flask service without rewriting
-components.
-
-### 2.1 Contribution ratio (total = 100)
-
-| Member | Contribution | Basis of evaluation |
-| --- | ---: | --- |
-| **Zhang Sufang** | **50** | 33 frontend source files (views, 15 components, store, API + mock layer, utils, styles), four UI design phases, responsive layouts, Excel import/export UI, validation-error mapping, frontend build and Static Site deployment |
-| **Ye Jiahui** | **50** | API contract, Flask app factory and routes, SQLite schema and data access, Excel service, 60 automated tests, WSGI/gunicorn and environment configuration, Web Service deployment |
-| **Total** | **100** | Feature sets are complementary (UI vs. API); each side owns roughly half of the graded features (favourites, multi-attribute contacts, import/export) end to end |
+Interface-first design: the API contract was specified and validated before full UI wiring, so the frontend could be developed against a mock layer and connected to the real Flask service with zero component modifications.
 
 ---
 
@@ -91,12 +79,10 @@ commit, then integrated with the backend branch through pull requests.*
 
 | Contributor | Role | Commits | Lines added | Lines deleted |
 | --- | --- | ---: | ---: | ---: |
-| Ye Jiahui (`JiahuiYe-FZU`) | Backend + integration | 9 | 3,543 | 1,148 |
-| Zhang Sufang (`KleinZhang168`) | Frontend | 4 | 9,550 | 254 |
+| Fatespur | Author / Full-stack | 13 | 13,093 | 1,402 |
 
 *Statistics captured on 2026-11-16 23:20 (UTC+8) at commit `3938164`; merge commits are excluded.*
 
-![Commits authored by KleinZhang168](blog/github-commits-zhang.png)
 
 *Figure 3 — Commits authored by the frontend developer.*
 
@@ -187,7 +173,7 @@ Deployed application (real Flask + SQLite backend, not Mock data):
 
 ![Live list and detail panel](blog/app-live-list.png)
 
-*Figure 4 — `https://ee308fz-addressbook-web.onrender.com` with four contacts loaded from the live API.*
+*Figure 4 — `https://contacthub-web.onrender.com` with four contacts loaded from the live API.*
 
 ![Settings page](blog/app-live-settings.png)
 
@@ -222,7 +208,7 @@ Suggested 3-minute recording script (covers every graded feature):
 
 | Time | Action |
 | --- | --- |
-| 0:00–0:15 | Open <https://ee308fz-addressbook-web.onrender.com>, show the contact list (warm up the free instance first) |
+| 0:00–0:15 | Open <https://contacthub-web.onrender.com>, show the contact list (warm up the free instance first) |
 | 0:15–0:40 | Search by keyword, filter by group, toggle *favourites only*, change page size |
 | 0:40–1:15 | Create a contact with two phones, one email, one social account and one address; demonstrate validation errors, then save |
 | 1:15–1:40 | Edit the contact, toggle the favourite star, delete with confirmation |
@@ -326,7 +312,7 @@ a deployment should be.
 
 ## 10. Appendix
 
-- API contract: [docs/API.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/API.md)
-- Coding standards: [docs/CODING_STANDARDS.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/CODING_STANDARDS.md)
-- Deployment guide: [docs/DEPLOY_RENDER.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/DEPLOY_RENDER.md)
-- Acceptance checklist: [docs/ACCEPTANCE.md](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook/blob/main/docs/ACCEPTANCE.md)
+- API contract: [docs/API.md](API.md)
+- Coding standards: [docs/CODING_STANDARDS.md](CODING_STANDARDS.md)
+- Deployment guide: [docs/DEPLOY_RENDER.md](DEPLOY_RENDER.md)
+- Acceptance checklist: [docs/ACCEPTANCE.md](ACCEPTANCE.md)

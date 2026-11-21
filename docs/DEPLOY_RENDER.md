@@ -2,7 +2,7 @@
 
 This guide covers deploying the AddressBook application (Python Flask + SQLite backend, Vue 3 + Vite frontend) to [Render](https://render.com). It includes local verification results, two deployment methods (Dashboard Manual and Blueprint Infrastructure as Code), data persistence trade-offs, and troubleshooting procedures.
 
-- Repository: <https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook>
+- Repository: <https://github.com/Fatespur/ContactHub>
 
 ---
 
@@ -60,7 +60,7 @@ Because frontend and backend run on distinct domains, cross-origin communication
 
 ### 3.1 Create Backend Web Service
 
-In Render Dashboard -> **New +** -> **Web Service** -> Select the `EE308FZ-AddressBook` repository.
+In Render Dashboard -> **New +** -> **Web Service** -> Select the `ContactHub` repository.
 
 | Field | Value |
 | --- | --- |
