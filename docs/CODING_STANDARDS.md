@@ -1,12 +1,12 @@
-# EE308FZ-AddressBook Development Standards & Collaboration Guidelines
+# ContactHub Development Standards & Collaboration Guidelines
 
 > [!IMPORTANT]
-> **Scope**: All team members of the EE308FZ Software Engineering Pair Project.
+> **Scope**: All contributors and developers of the ContactHub Project.
 > **Roles & Ownership**:
 > - **Backend**: Python Flask + SQLite + openpyxl, responsible for database persistence, RESTful APIs, and Excel import/export processing.
 > - **Frontend**: Vue 3 + JavaScript + Element Plus + Vite, responsible for UI/UX interaction, component hierarchy, client state, and API integration.
 >
-> This document establishes clean, concise, and consistent standards to maintain code quality and delivery efficiency throughout the pair software engineering project.
+> This document establishes clean, concise, and consistent standards to maintain code quality and delivery efficiency throughout the software engineering project.
 
 ---
 
@@ -104,7 +104,7 @@ gitGraph
   - `feat/backend-<feature-name>`
   - `fix/<bug-name>`
 
-### 4.2 Pair Collaboration Principles
+### 4.2 Module Collaboration Principles
 - Each developer owns their respective branch to prevent concurrent modifications to shared files.
 - Verify tests and local builds before pushing commits.
 

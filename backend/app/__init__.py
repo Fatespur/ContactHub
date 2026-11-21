@@ -1,4 +1,4 @@
-"""Minimal Flask application for the EE308FZ address book."""
+"""Minimal Flask application for ContactHub."""
 
 import os
 import re

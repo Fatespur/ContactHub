@@ -1,4 +1,4 @@
-# EE308FZ-AddressBook RESTful API Specification & Contract
+# ContactHub RESTful API Specification & Contract
 
 > [!IMPORTANT]
 > **Status**: Formal Frozen Contract.

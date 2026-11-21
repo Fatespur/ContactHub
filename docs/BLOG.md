@@ -1,25 +1,21 @@
-# Building a Decoupled Address Book: Vue 3 Frontend + Flask Backend on Render
+# Building ContactHub: Decoupled Vue 3 Frontend + Flask Backend Architecture Review
 
 | | |
 | --- | --- |
-| **Course** | EE308FZ Software Engineering · Extreme Programming Assignment |
+| **Project** | ContactHub · Architecture & Engineering Practice Review |
 | **Team** | Zhang Sufang (frontend, GitHub [KleinZhang168](https://github.com/KleinZhang168)) · Ye Jiahui (backend, GitHub [JiahuiYe-FZU](https://github.com/JiahuiYe-FZU)) |
-| **Deadline** | November 17, 2026 23:59 |
-| **Repository** | <https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook> |
+| **Version** | v1.0.0 Architecture Milestone |
+| **Repository** | <https://github.com/Fatespur/ContactHub> |
 
-> This post is written from the frontend developer's point of view. It covers the project links, commit
-> statistics, implementation ideas, running screenshots and demo video, division of labour, contribution
-> evaluation, cooperation difficulties, and the PSP tables for both team members.
+> This post covers the project architecture, design evolution, commit statistics, implementation ideas, running screenshots, division of labour, technical challenges and engineering reflections.
 
-## Assignment
+## Project Background & Architecture Goals
 
-This is the EE308FZ *Extreme Programming* pair assignment: build an address book web application that supports
-**favouriting contacts** (25 points), **multiple contact methods per contact** (10 points) and **Excel import /
-export** (25 points), with an optional **cloud deployment** bonus (15 points). The team must work in a shared
-GitHub repository (at least three commits), follow an agreed code standard, and submit an individual blog
-containing the repository and access links, commit statistics, implementation ideas, screenshots and a demo
-video, the division of labour, contribution ratios, the difficulties met during collaboration, and a PSP table
-per student.
+ContactHub is designed as a production-ready, decoupled address book and contact data exchange system. The core architecture requirements include:
+- **Contact Lifecycle Management**: robust CRUD operations with multi-attribute contact methods.
+- **Data Exchange**: bidirectional, standard 8-column Excel (`.xlsx`) bulk import and export with formula injection protection.
+- **Enterprise UI/UX**: responsive layouts (desktop 3-column, tablet drawer), instant debounced search, and keyboard accessibility.
+- **Decoupled Delivery**: strict contract-first RESTful API (`docs/API.md`), enabling independent frontend and backend development with seamless Mock/Real switching.
 
 ## Contents
 
@@ -29,7 +25,7 @@ per student.
 4. [Functional Implementation Ideas (Frontend)](#4-functional-implementation-ideas-frontend)
 5. [Screenshots of the Running System](#5-screenshots-of-the-running-system)
 6. [Demo Video](#6-demo-video)
-7. [PSP Tables](#7-psp-tables)
+7. [Engineering Phase & Time Metrics](#7-engineering-phase--time-metrics)
 8. [Cooperation Difficulties and How We Resolved Them](#8-cooperation-difficulties-and-how-we-resolved-them)
 9. [Reflections](#9-reflections)
 10. [Appendix](#10-appendix)
@@ -237,11 +233,11 @@ Suggested 3-minute recording script (covers every graded feature):
 
 ---
 
-## 7. PSP Tables
+## 7. Engineering Phase & Time Metrics
 
-### 7.1 Zhang Sufang — Frontend
+### 7.1 Zhang Sufang — Frontend Phase Metrics
 
-| PSP2.1 | Stage | Time (h) | % |
+| Engineering Phase | Stage | Time (h) | % |
 | --- | --- | ---: | ---: |
 | Planning | Estimate | 1.0 | 2.6 |
 | Development | Analysis (API contract, UI spec) | 2.5 | 6.6 |
@@ -257,9 +253,9 @@ Suggested 3-minute recording script (covers every graded feature):
 | Postmortem | Summary | 0.5 | 1.3 |
 | **Total** | | **38.0** | **100** |
 
-### 7.2 Ye Jiahui — Backend
+### 7.2 Ye Jiahui — Backend Phase Metrics
 
-| PSP2.1 | Stage | Time (h) | % |
+| Engineering Phase | Stage | Time (h) | % |
 | --- | --- | ---: | ---: |
 | Planning | Estimate | 0.5 | 1.6 |
 | Development | Analysis (API contract) | 2.0 | 6.3 |
@@ -319,7 +315,7 @@ Suggested 3-minute recording script (covers every graded feature):
 
 ## 9. Reflections
 
-The most valuable part of this assignment was not any single feature but the **contract-first workflow**: writing
+The most valuable part of this project was not any single feature but the **contract-first workflow**: writing
 `docs/API.md` and a mock layer before the backend existed let both of us work in parallel, and integration took
 hours instead of days. The deployment step also taught us that "it works on my machine" is a weak claim: free
 cloud instances sleep, files disappear, ports must be bound to `0.0.0.0`, and cross-origin rules are real. Every

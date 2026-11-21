@@ -355,7 +355,7 @@ python -m pytest
 ```text
 ============================= test session starts =============================
 platform win32 -- Python 3.13.6, pytest-9.1.1, pluggy-1.6.0
-rootdir: C:\Users\Fate永恒\Desktop\homework\ContactHub\backend
+rootdir: ContactHub/backend
 configfile: pytest.ini
 collected 65 items
 
@@ -455,7 +455,7 @@ dist/assets/index-CzG1Q3y2.js          1,173.75 kB │ gzip: 388.07 kB
 
 ## 12. 开源贡献与历史说明
 
-- **项目起源**：本项目源于福州大学软件工程结对编程项目 [EE308FZ-AddressBook](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook)。
+- **项目起源**：本项目源于开源项目 [AddressBook](https://github.com/JiahuiYe-FZU/EE308FZ-AddressBook)。
 - **核心贡献者**：感谢原始作者 **叶嘉辉 (@JiahuiYe-FZU)** 及其团队在早期架构与核心原型开发中奠定的优秀工程基础。
 - **独立发行版 (ContactHub)**：本项目在保留原始完整 Git 提交历史与开源许可的前提下，由 **Fatespur** 进行全面工程化重构、中文深度本地化、中文检索与地址检索增强、自动化测试套件扩充及规范化文档重建。
 - **代码许可**：本项目基于 [MIT License](LICENSE) 开源。

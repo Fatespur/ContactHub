@@ -111,7 +111,7 @@ const CONTACTS = [
     name: '陈明',
     group: '同学',
     is_favorite: false,
-    notes: '课程设计搭档',
+    notes: '技术协作伙伴',
     phones: [{ label: '手机', number: '13812345678', is_primary: true }],
     emails: [{ label: '个人', email: 'chenming@email.com', is_primary: true }],
     social_accounts: [{ platform: 'QQ', account: '728391045' }],
