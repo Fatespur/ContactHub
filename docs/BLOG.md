@@ -320,6 +320,16 @@ a deployment should be.
 - Deployment guide: [docs/DEPLOY_RENDER.md](DEPLOY_RENDER.md)
 - Acceptance checklist: [docs/ACCEPTANCE.md](ACCEPTANCE.md)
 
-### Authorization & Upstream Lineage Note
+### Authorization & Maintainer License Clearance Checklist
 ContactHub is an engineering evolution of the initial academic pair-programming repository `EE308FZ-AddressBook`. 
-While this standalone release is maintained under the MIT License by Fatespur, formal written confirmation or a CLA from original contributors (Ye Jiahui and Zhang Sufang) remains an open administrative item for unrestricted commercial redistribution. All original commits and attributions are faithfully preserved.
+The upstream project did not include an explicit `LICENSE` file. Because this repository contains code authored by different contributors, the maintainer cannot assume MIT licensing has been granted automatically across all assets.
+
+Until the following manual clearances are obtained, **this project does not claim that MIT relicensing is fully effective across all historical assets**:
+
+| Item | Covered Assets | Original Rights Holder | Clearance Scope | Current Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **Backend codebase** | `backend/app/`, `backend/tests/`, models | **Ye Jiahui** | Affirm agreement to license historical backend code under MIT with rights to modify and redistribute | 🟡 Pending manual confirmation (Issue / Email / CLA) |
+| **Frontend codebase** | `frontend/src/`, components, styles | **Zhang Sufang** | Affirm agreement to license historical frontend code under MIT with rights to modify and redistribute | 🟡 Pending manual confirmation (Issue / Email / CLA) |
+| **Evolution codebase** | CI workflows, scripts, docs & refactoring | **Fatespur** | Confirmed under MIT License | 🟢 Granted |
+
+All original commit histories and author attributions are strictly and faithfully preserved without rewrite.
