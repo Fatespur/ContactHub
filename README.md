@@ -29,7 +29,7 @@ ContactHub（联系人管理与数据交换系统）是一套基于现代 Web �
 - [9. 自动化测试](#9-自动化测试)
 - [10. 部署指南](#10-部署指南)
 - [11. 项目截图](#11-项目截图)
-- [12. 开源协议与作者](#12-开源协议与作者)
+- [12. 开源协议、项目团队与授权确认清单](#12-开源协议项目团队与授权确认清单)
 
 ---
 
@@ -168,7 +168,7 @@ ContactHub/
 
 ### 5.1 环境需求
 
-- **Python**: 推荐 `3.11` 及以上版本。当前完整自动化测试套件（60 项单元与集成测试）在 GitHub Actions CI 中通过 **Python 3.11、3.12、3.13 真实版本矩阵** 验证全部通过。在 Python 3.10 环境下，由于测试套件（`backend/tests/test_api.py`）使用了 Python 3.11+ 标准库 `datetime.fromisoformat()` 解析以 `'Z'` 结尾的 ISO-8601 时间戳，测试套件会抛出 `ValueError`；在未经进一步运行验证的情况下，不应武断判定后端业务代码必然不兼容 Python 3.10，但建议优先使用已获完整 CI 矩阵验证的 Python 3.11–3.13 环境（本地基准开发环境为 Python 3.13.6）。
+- **Python**: 推荐 `3.11` 及以上版本。当前完整自动化测试套件（65 项单元与集成测试）在 GitHub Actions CI 中通过 **Python 3.11、3.12、3.13 真实版本矩阵** 验证全部通过。在 Python 3.10 环境下，由于测试套件（`backend/tests/test_api.py`）使用了 Python 3.11+ 标准库 `datetime.fromisoformat()` 解析以 `'Z'` 结尾的 ISO-8601 时间戳，测试套件会抛出 `ValueError`；在未经进一步运行验证的情况下，不应武断判定后端业务代码必然不兼容 Python 3.10，但建议优先使用已获完整 CI 矩阵验证的 Python 3.11–3.13 环境（本地基准开发环境为 Python 3.13.6）。
 - **Node.js**: `20.19+` 或 `22.12+`（适配 Vite 7 生产构建）
 - **npm**: `10.0+`
 
@@ -470,22 +470,23 @@ dist/assets/index-CzG1Q3y2.js          1,173.75 kB │ gzip: 388.07 kB
 
 ---
 
+<a id="12-开源协议与作者"></a><a id="12-开源协议项目团队与授权确认清单"></a>
 ## 12. 开源协议、项目团队与授权确认清单
 
-- **原始开发团队（结对编程贡献者）**：
-  - **Ye Jiahui** ([GitHub @JiahuiYe-FZU](https://github.com/JiahuiYe-FZU))：负责后端 API 合约制定、Flask 应用工厂、SQLite 数据持久化、openpyxl Excel 数据流转与自动化测试套件构建。
-  - **Zhang Sufang** ([GitHub @KleinZhang168](https://github.com/KleinZhang168))：负责前端整体 UI/UX 架构、Vue 3 组件库设计、Pinia 响应式状态管理、表单脏检查与动态错误映射。
-- **项目维护与工程化演进**：
-  - **Fatespur** ([GitHub @Fatespur](https://github.com/Fatespur))：负责全要素中文化重构、工程化解耦迁移、CI 多版本矩阵自动化流水线配置与安全合规加固。
+- **项目团队与历史贡献**：
+  - **Ye Jiahui / Fatespur** ([GitHub @JiahuiYe-FZU](https://github.com/JiahuiYe-FZU) / [GitHub @Fatespur](https://github.com/Fatespur))：项目维护者（同一维护者的不同 GitHub 账号）。结对编程时期负责后端 API 契约制定、Flask 架构、SQLite 数据持久化、openpyxl Excel 数据流转与自动化测试套件；后续以 Fatespur 账号主导全要素中文化重构、工程化迁移解耦、CI 多版本流水线配置与安全加固。
+  - **Zhang Sufang** ([GitHub @KleinZhang168](https://github.com/KleinZhang168))：结对编程共同作者，负责前端整体 UI/UX 架构、Vue 3 组件库设计、Pinia 响应式状态管理、表单脏检查与动态错误映射。
 
 ### 维护者人工授权确认清单 (Maintainer Manual License Clearance Checklist)
 
-原始结对项目仓库（`EE308FZ-AddressBook`）在开发初期未包含显式的 LICENSE 文件。由于项目中包含不同作者的历史代码资产，维护者不得单方面假设已取得共同贡献者的全量开源授权。在完成以下人工确认前，**本项目不声称整个项目的 MIT 再授权已完全生效**：
+原始结对项目仓库（`EE308FZ-AddressBook`）在开发初期未包含显式的 LICENSE 文件。由于项目中包含不同贡献者的历史代码资产，必须严格界定权利归属，不得单方面假设已取得共同作者的全量开源授权。在完成以下人工确认前，**本项目不声称整个项目的 MIT 再授权已完全生效**：
 
 | 待确认项目 | 涉及代码范围 | 原权利人 | 待确认许可内容 | 确认状态 |
 | :--- | :--- | :--- | :--- | :---: |
-| **后端代码许可** | `backend/app/`, `backend/tests/` 及数据模型 | **Ye Jiahui** | 确认同意将其编写的后端代码以 MIT License 形式开源并允许后续修改与分发 | 🟡 待人工确认 (Issue / 邮件 / CLA) |
-| **前端代码许可** | `frontend/src/` 及页面组件样式 | **Zhang Sufang** | 确认同意将其编写的前端代码以 MIT License 形式开源并允许后续修改与分发 | 🟡 待人工确认 (Issue / 邮件 / CLA) |
-| **维护者演进代码** | CI 工作流、工程脚本、文档及重构代码 | **Fatespur** | 已确认遵从 MIT License 开放 | 🟢 已授权 |
+| **维护者代码（后端及演进重构）** | `backend/` 业务代码、测试套件、CI 流水线、工程配置与文档重构 | **Ye Jiahui / Fatespur**（同一维护者的不同 GitHub 账号） | 维护者完全授权并同意将其编写的代码以 MIT License 开源及后续分发 | 🟢 已授权 (维护者本人) |
+| **共同贡献者代码（前端初始架构）** | 结对编程阶段由 Zhang Sufang 编写的 `frontend/src/` 初始页面组件及样式 | **Zhang Sufang** ([@KleinZhang168](https://github.com/KleinZhang168)) | 确认同意将其编写的前端代码以 MIT License 形式开源并允许后续修改与分发 | 🟡 待人工确认 (Issue / 邮件 / CLA) |
 
-> **历史真实性承诺**：本项目严禁且绝不删除原始贡献者的 Git 提交记录，绝不改写历史 commit 签名。当前仓库顶层的 [LICENSE](LICENSE) 文件代表维护者自身工作成果的开源意向；若原作者提出异议，将按原作者意愿进行协议调整或代码隔离。
+> **权利归属与合规边界说明**：
+> 1. **账号同人界定**：`JiahuiYe-FZU` 与 `Fatespur` 属于同一维护者的不同 GitHub 账号，其名下代码资产已由维护者本人确认遵循 MIT License 开放，不重复计算为独立的待授权人员。
+> 2. **独立贡献者授权未完成**：对于共同作者 Zhang Sufang 拥有著作权的历史前端代码资产，在未取得其正式授权证据前，**必须严格维持授权未完成的判断，本项目绝不单方面标记为已授权**。
+> 3. **历史真实性承诺**：本项目严禁且绝不删除原始贡献者的 Git 提交记录，绝不改写历史 commit 签名。当前仓库顶层的 [LICENSE](LICENSE) 文件代表维护者自身工作成果的开源意向；若原共同作者对开源许可提出异议，维护者承诺按原作者意愿进行协议调整或代码剥离重写。

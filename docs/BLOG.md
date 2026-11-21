@@ -24,14 +24,14 @@ The core architecture requirements include:
 
 1. [Project Address and Links](#1-project-address-and-links)
 2. [Module Architecture & Division of Responsibilities](#2-module-architecture--division-of-responsibilities)
-3. [Commit History and Development Statistics](#3-commit-history-and-development-statistics)
+3. [Commit History and Contribution Statistics](#3-commit-history-and-contribution-statistics)
 4. [Functional Implementation Ideas (Frontend)](#4-functional-implementation-ideas-frontend)
 5. [Screenshots of the Running System](#5-screenshots-of-the-running-system)
 6. [Demo Video](#6-demo-video)
 7. [Engineering Phase & Time Metrics](#7-engineering-phase--time-metrics)
-8. [Technical Challenges and How They Were Resolved](#8-technical-challenges-and-how-they-were-resolved)
+8. [Cooperation Difficulties and How We Resolved Them](#8-cooperation-difficulties-and-how-we-resolved-them)
 9. [Reflections](#9-reflections)
-10. [Appendix](#10-appendix)
+10. [Appendix & Authorization Status](#10-appendix--authorization-status)
 
 ---
 
@@ -63,6 +63,7 @@ Interface-first design: the API contract was specified and validated before full
 
 ---
 
+<a id="3-commit-history-and-development-statistics"></a><a id="3-commit-history-and-contribution-statistics"></a>
 ## 3. Commit History and Contribution Statistics
 
 ### 3.1 Commit history
@@ -255,7 +256,7 @@ Suggested 3-minute recording script (covers every graded feature):
 | Development | Coding (Flask API, Excel service) | 10.0 | 31.3 |
 | Development | Code review | 1.5 | 4.7 |
 | Development | Test plan | 1.0 | 3.1 |
-| Development | Testing (60 pytest cases) | 5.0 | 15.6 |
+| Development | Testing (65 pytest cases) | 5.0 | 15.6 |
 | Deployment | WSGI, gunicorn, environment configuration | 2.0 | 6.3 |
 | Record Time Spent | Time log | 0.5 | 1.6 |
 | Postmortem | Summary | 0.5 | 1.6 |
@@ -263,6 +264,7 @@ Suggested 3-minute recording script (covers every graded feature):
 
 ---
 
+<a id="8-technical-challenges-and-how-they-were-resolved"></a><a id="8-cooperation-difficulties-and-how-we-resolved-them"></a>
 ## 8. Cooperation Difficulties and How We Resolved Them
 
 1. **Branch strategy disagreement.** We first created an integration branch (`dev`) containing both modules, but
@@ -313,6 +315,7 @@ a deployment should be.
 
 ---
 
+<a id="10-appendix"></a><a id="10-appendix--authorization-status"></a>
 ## 10. Appendix & Authorization Status
 
 - API contract: [docs/API.md](API.md)
@@ -322,14 +325,16 @@ a deployment should be.
 
 ### Authorization & Maintainer License Clearance Checklist
 ContactHub is an engineering evolution of the initial academic pair-programming repository `EE308FZ-AddressBook`. 
-The upstream project did not include an explicit `LICENSE` file. Because this repository contains code authored by different contributors, the maintainer cannot assume MIT licensing has been granted automatically across all assets.
+The upstream project did not include an explicit `LICENSE` file. Because this repository contains code authored by different contributors, rights attribution must be handled rigorously.
 
 Until the following manual clearances are obtained, **this project does not claim that MIT relicensing is fully effective across all historical assets**:
 
 | Item | Covered Assets | Original Rights Holder | Clearance Scope | Current Status |
 | :--- | :--- | :--- | :--- | :---: |
-| **Backend codebase** | `backend/app/`, `backend/tests/`, models | **Ye Jiahui** | Affirm agreement to license historical backend code under MIT with rights to modify and redistribute | 🟡 Pending manual confirmation (Issue / Email / CLA) |
-| **Frontend codebase** | `frontend/src/`, components, styles | **Zhang Sufang** | Affirm agreement to license historical frontend code under MIT with rights to modify and redistribute | 🟡 Pending manual confirmation (Issue / Email / CLA) |
-| **Evolution codebase** | CI workflows, scripts, docs & refactoring | **Fatespur** | Confirmed under MIT License | 🟢 Granted |
+| **Maintainer Codebase** | `backend/` application logic, test suites, CI workflows, scripts, docs & refactoring | **Ye Jiahui / Fatespur** (same maintainer, different GitHub accounts) | Maintainer confirms and grants MIT license across his historical and evolution codebase | 🟢 Authorized (Maintainer) |
+| **Frontend Codebase** | `frontend/src/`, components, styles authored during pair programming | **Zhang Sufang** ([@KleinZhang168](https://github.com/KleinZhang168)) | Affirm agreement to license historical frontend code under MIT with rights to modify and redistribute | 🟡 Pending manual confirmation (Issue / Email / CLA) |
 
-All original commit histories and author attributions are strictly and faithfully preserved without rewrite.
+> **Rights Attribution & Compliance Notes:**
+> 1. `JiahuiYe-FZU` and `Fatespur` represent the same maintainer's different GitHub accounts and are not redundantly counted as independent parties requiring authorization.
+> 2. For codebase assets authored by the other contributor (**Zhang Sufang**), in the absence of explicit authorization evidence, **the project strictly maintains the status of authorization incomplete / pending**, and never marks them as authorized unilaterally.
+> 3. All original commit histories and author attributions are strictly and faithfully preserved without rewrite.
