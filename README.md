@@ -1,5 +1,6 @@
 # 联系人管理与数据交换系统 (ContactHub)
 
+[![CI](https://github.com/Fatespur/ContactHub/actions/workflows/ci.yml/badge.svg)](https://github.com/Fatespur/ContactHub/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://www.python.org/)
 [![Flask: 3.1](https://img.shields.io/badge/Flask-3.1-black.svg)](https://flask.palletsprojects.com/)
@@ -10,6 +11,8 @@
 ContactHub（联系人管理与数据交换系统）是一套基于现代 Web 前后端分离架构设计的专业通讯录与联系人数据交换中台。系统聚焦于多属性联系人生命周期管理、结构化数据组织、全字段实时检索以及企业级规范的 Excel（`.xlsx`）双向数据批量交换。
 
 本项目采用全栈工程化架构设计，前端提供全要素简体中文交互界面，后端具备完备的 UTF-8 中文字符集支持与企业级数据校验能力。
+
+> **项目源起与演进说明**：本项目最初源自软件工程结对编程项目（福州大学 EE308FZ 课程项目 `EE308FZ-AddressBook`，由 Ye Jiahui 负责后端架构与接口设计、Zhang Sufang 负责前端界面与交互实现）；后续由 Fatespur 进行工程化演进、全要素中文化重构、安全加固与持续维护，升级为独立的 ContactHub 开源项目。
 
 ---
 
@@ -165,8 +168,8 @@ ContactHub/
 
 ### 5.1 环境需求
 
-- **Python**: `3.10` 及以上版本（在 3.10、3.11、3.12、3.13 均验证通过）
-- **Node.js**: `20.19+` 或 `22.12+`（适配 Vite 7）
+- **Python**: 推荐 `3.10` 及以上版本（本地开发基于 Python 3.13.6 执行 65 项自动化测试验证全部通过；跨版本兼容性由 GitHub Actions CI 矩阵保障）
+- **Node.js**: `20.19+` 或 `22.12+`（适配 Vite 7 生产构建）
 - **npm**: `10.0+`
 
 ---
@@ -443,6 +446,19 @@ dist/assets/index-CzG1Q3y2.js          1,173.75 kB │ gzip: 388.07 kB
 
 ---
 
+### 10.3 安全与数据隐私声明 (公开演示与生产须知)
+
+> [!CAUTION]
+> **公开演示实例数据隐私安全提示**  
+> 1. **未鉴权 CRUD 接口说明**：本系统作为全栈演示中台，当前 RESTful API（`/api/v1/contacts`）默认采用无鉴权设计，以便于本地评估、课程验收及架构评审。
+> 2. **演示环境数据安全**：在公网部署的演示环境（如 Render Free Tier）中，**严禁上传或录入任何真实的商业机密、个人敏感信息（真实手机号、身份证、住址等）**。Render 免费实例采用临时存储，在容器重启或重新部署时会自动清空数据，切勿依赖其存储真实生产数据。
+> 3. **生产环境加固规范**：若将系统接入企业实际生产环境，必须：
+>    - 在反向代理层（Nginx / API Gateway）增加统一身份认证（如 OAuth2 / JWT / HTTP Basic Auth）；
+>    - 严格限制 `CORS_ORIGINS` 为企业受信前端域名，禁止使用 `*` 通配符；
+>    - 挂载持久化磁盘卷（Persistent Volume），并定期做好 SQLite 数据库备份与加密。
+
+---
+
 ## 11. 项目截图
 
 | 界面描述 | 预览效果 |
@@ -456,7 +472,11 @@ dist/assets/index-CzG1Q3y2.js          1,173.75 kB │ gzip: 388.07 kB
 
 ---
 
-## 12. 开源协议与作者
+## 12. 开源协议与项目团队
 
-- **项目作者**：Fatespur
-- **开源协议**：本项目基于 [MIT License](LICENSE) 协议发布，欢迎交流与使用。
+- **原始开发团队（结对编程）**：
+  - **Ye Jiahui** ([GitHub @JiahuiYe-FZU](https://github.com/JiahuiYe-FZU))：负责后端 API 合约制定、Flask 应用工厂、SQLite 数据持久化、openpyxl Excel 数据流转与自动化测试套件构建。
+  - **Zhang Sufang** ([GitHub @KleinZhang168](https://github.com/KleinZhang168))：负责前端整体 UI/UX 架构、Vue 3 组件库设计、Pinia 响应式状态管理、表单脏检查与动态错误映射。
+- **项目维护与工程化演进**：
+  - **Fatespur** ([GitHub @Fatespur](https://github.com/Fatespur))：负责全要素中文化重构、工程化解耦迁移、CI 持续集成流水线配置与安全合规维护。
+- **开源协议**：本项目基于 [MIT License](LICENSE) 协议发布，欢迎学术交流与工程参考。

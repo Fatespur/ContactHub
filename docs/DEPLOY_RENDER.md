@@ -1,6 +1,6 @@
 # Deploying to Render (Full-Stack Deployment Guide)
 
-This guide covers deploying the AddressBook application (Python Flask + SQLite backend, Vue 3 + Vite frontend) to [Render](https://render.com). It includes local verification results, two deployment methods (Dashboard Manual and Blueprint Infrastructure as Code), data persistence trade-offs, and troubleshooting procedures.
+This guide covers deploying the ContactHub application (Python Flask + SQLite backend, Vue 3 + Vite frontend) to [Render](https://render.com). It includes local verification results, two deployment methods (Dashboard Manual and Blueprint Infrastructure as Code), data persistence trade-offs, and troubleshooting procedures.
 
 - Repository: <https://github.com/Fatespur/ContactHub>
 
@@ -40,12 +40,12 @@ Verify that the following essential files are present in the repository:
 
 ```
 Browser Client
-  │  https://addressbook-web.onrender.com        (Static Site, CDN)
-  │      └─ axios baseURL = https://addressbook-api.onrender.com/api/v1
-  ▼
-https://addressbook-api.onrender.com             (Web Service, Python + gunicorn)
-  │      └─ Flask app (/api/v1/...), Flask-CORS allows frontend origin via CORS_ORIGINS
-  ▼
+  �? https://contacthub-web.onrender.com        (Static Site, CDN)
+  �?     └─ axios baseURL = https://contacthub-api.onrender.com/api/v1
+  �?
+https://contacthub-api.onrender.com             (Web Service, Python + gunicorn)
+  �?     └─ Flask app (/api/v1/...), Flask-CORS allows frontend origin via CORS_ORIGINS
+  �?
 SQLite file: backend/instance/address_book.sqlite3 (ephemeral by default; persistent if Disk attached)
 ```
 
@@ -64,7 +64,7 @@ In Render Dashboard -> **New +** -> **Web Service** -> Select the `ContactHub` r
 
 | Field | Value |
 | --- | --- |
-| Name | `addressbook-api` |
+| Name | `contacthub-api` |
 | Language / Runtime | `Python 3` |
 | Region | `Singapore` (or nearest region) |
 | Branch | `main` |
@@ -85,11 +85,11 @@ Click **Create Web Service**. Wait until logs display `Booting worker` and statu
 
 Verification:
 ```bash
-curl https://addressbook-api.onrender.com/api/v1/contacts
+curl https://contacthub-api.onrender.com/api/v1/contacts
 # Expected response: {"code":200,"data":{"items":[],"page":1,"page_size":10,"total":0},"message":"success"}
 ```
 
-> Note: Free tier instances spin down after 15 minutes of inactivity. The initial cold start may take 30–60 seconds, which is normal behavior.
+> Note: Free tier instances spin down after 15 minutes of inactivity. The initial cold start may take 30�?0 seconds, which is normal behavior.
 
 ### 3.2 Create Frontend Static Site
 
@@ -97,7 +97,7 @@ In Render Dashboard -> **New +** -> **Static Site** -> Select the same repositor
 
 | Field | Value |
 | --- | --- |
-| Name | `addressbook-web` |
+| Name | `contacthub-web` |
 | Branch | `main` |
 | **Root Directory** | `frontend` *(Critical)* |
 | Build Command | `npm install && npm run build` |
@@ -109,7 +109,7 @@ Under **Environment Variables**, add:
 | --- | --- |
 | `NODE_VERSION` | `22.12.0` (Vite 7 requires Node >= 20.19 or 22.12) |
 | `VITE_USE_MOCK` | `false` (ensures production builds connect to live API) |
-| `VITE_API_BASE_URL` | `https://addressbook-api.onrender.com/api/v1` (replace with actual backend URL from step 3.1, no trailing slash) |
+| `VITE_API_BASE_URL` | `https://contacthub-api.onrender.com/api/v1` (replace with actual backend URL from step 3.1, no trailing slash) |
 
 Under **Redirects / Rewrites** (in Settings or Advanced during creation), add a single rule for SPA routing:
 
@@ -124,14 +124,14 @@ Under **Redirects / Rewrites** (in Settings or Advanced during creation), add a 
 Update the backend `CORS_ORIGINS` variable from `*` to the exact frontend domain:
 
 ```
-https://addressbook-web.onrender.com
+https://contacthub-web.onrender.com
 ```
 
 Save changes; Render will redeploy the service automatically.
 
 ### 3.4 Verification
 
-Navigate to `https://addressbook-web.onrender.com` and run through the verification checklist below.
+Navigate to `https://contacthub-web.onrender.com` and run through the verification checklist below.
 
 ---
 
@@ -140,7 +140,7 @@ Navigate to `https://addressbook-web.onrender.com` and run through the verificat
 A root `render.yaml` is provided to deploy both services simultaneously:
 
 1. Render Dashboard -> **New +** -> **Blueprint** -> Select repository (`main` branch).
-2. Render parses `addressbook-api` and `addressbook-web`.
+2. Render parses `contacthub-api` and `contacthub-web`.
 3. Fill in `VITE_API_BASE_URL` when prompted (or leave blank and set after deployment).
 4. Click **Apply** and wait for both services to enter the **Live** state.
 5. In the frontend service settings, supply `VITE_API_BASE_URL` and redeploy using "Clear build cache & deploy".
@@ -155,7 +155,7 @@ render blueprints validate render.yaml
 
 ## 5. Post-Deployment Verification Checklist
 
-- [ ] `GET https://addressbook-api.onrender.com/api/v1/contacts` returns JSON (status 200).
+- [ ] `GET https://contacthub-api.onrender.com/api/v1/contacts` returns JSON (status 200).
 - [ ] Home page loads: contact table is initially empty or displays previously imported data (not the 20 mock records).
 - [ ] Create Contact: new contact appears in list and persists upon page refresh within the same container lifecycle.
 - [ ] Edit, Delete, and Favorite toggle (`PATCH`) function as expected.
@@ -163,7 +163,7 @@ render blueprints validate render.yaml
 - [ ] Excel Export: downloads `.xlsx` readable by Microsoft Excel / LibreOffice / WPS.
 - [ ] Excel Import: download template, populate sample rows, upload file, and confirm success summary.
 - [ ] Browser DevTools -> Network: API requests target the backend domain with `access-control-allow-origin` headers.
-- [ ] Direct navigation or refresh on `https://addressbook-web.onrender.com/settings` returns HTTP 200 (SPA rewrite functioning).
+- [ ] Direct navigation or refresh on `https://contacthub-web.onrender.com/settings` returns HTTP 200 (SPA rewrite functioning).
 
 ---
 
@@ -173,14 +173,14 @@ render blueprints validate render.yaml
 | --- | --- | --- |
 | Storage Location | Container ephemeral filesystem (`backend/instance/address_book.sqlite3`) | Persistent mount (`/var/data/address_book.sqlite3`) |
 | Data Survival | Reset on redeployment or restart | Preserved across restarts and redeployments |
-| Cold Start | Spins down after 15 min idle; 30–60s cold start | Starter plan does not spin down |
+| Cold Start | Spins down after 15 min idle; 30�?0s cold start | Starter plan does not spin down |
 | Cost | Free (750 instance hours / month) | Starter tier (~$7/mo) + Disk ($0.25/GB/mo) |
 
 **For course evaluation and demo**: The free tier is sufficient. Sample data can be re-imported via Excel before demonstration.
 
 **For persistent production storage**:
 1. Upgrade backend **Settings -> Instance Type** to `Starter`.
-2. In **Disks -> Add Disk**: Name `addressbook-data`, Mount Path `/var/data`, Size `1 GB`.
+2. In **Disks -> Add Disk**: Name `contacthub-data`, Mount Path `/var/data`, Size `1 GB`.
 3. In **Environment Variables**: Add `DATABASE=/var/data/address_book.sqlite3`.
 4. Trigger redeployment via **Manual Deploy**.
 
@@ -216,3 +216,4 @@ render blueprints validate render.yaml
 | `.gitignore` | Whitelists `frontend/public/templates/*.xlsx` | Ensures import templates are committed |
 | `render.yaml` | Blueprint specification | One-click dual-service deployment |
 | `docs/DEPLOY_RENDER.md` | Deployment guide | Complete instructions and troubleshooting |
+

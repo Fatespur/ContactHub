@@ -1,18 +1,19 @@
 # Render Blueprint — Deploy Backend API + Frontend Static Site
 #
-# Usage: Render Dashboard -> New -> Blueprint -> Select this repo -> Apply.
-# For detailed instructions and FAQ, see docs/DEPLOY_RENDER.md.
+# ContactHub Architecture: Decoupled frontend and backend defining two services:
+#   1) contacthub-api: Flask + gunicorn Web Service (Python)
+#   2) contacthub-web: Vite build output dist/ Static Site
 #
-# Architecture: Decoupled frontend and backend defining two services:
-#   1) addressbook-api: Flask + gunicorn Web Service (Python)
-#   2) addressbook-web: Vite build output dist/ Static Site
-# Backend enables CORS via CORS_ORIGINS; frontend API base URL is injected
-# at build time via VITE_API_BASE_URL (falls back to relative /api/v1 if unset).
+# SECURITY & PRIVACY NOTICE:
+# The REST API currently operates in unauthenticated mode for demonstration purposes.
+# Do NOT upload real, sensitive, or personally identifiable contact data to public instances.
+# In production deployments, configure reverse-proxy authentication (e.g. OAuth/JWT/Basic Auth)
+# and restrict CORS_ORIGINS to authorized frontend origins.
 
 services:
   # ---------- Backend API ----------
   - type: web
-    name: addressbook-api
+    name: contacthub-api
     runtime: python
     plan: free
     region: singapore
@@ -20,37 +21,34 @@ services:
     autoDeployTrigger: commit
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    # Render injects port via $PORT; must bind 0.0.0.0; single worker with threads is optimal for SQLite.
     startCommand: gunicorn -b 0.0.0.0:$PORT --workers 1 --threads 4 wsgi:app
     healthCheckPath: /api/v1/contacts
     envVars:
       - key: PYTHON_VERSION
         value: "3.13.4"
-      # Allowed CORS origins for frontend, separated by commas.
-      # "*" allows any origin (acceptable for demos without auth cookies);
-      # Change to https://addressbook-web.onrender.com for production.
+      # Allowed CORS origins. Restricted to frontend domain for demo security.
+      # For local testing, requests go through the Vite reverse proxy.
       - key: CORS_ORIGINS
-        value: "*"
-      # Database file path. Defaults to backend/instance/address_book.sqlite3 (ephemeral filesystem).
-      # For persistence, refer to docs/DEPLOY_RENDER.md "Data Persistence":
-      #   Change plan to starter, uncomment disk below, and set DATABASE to /var/data/address_book.sqlite3
+        value: "https://contacthub-web.onrender.com"
+      # Database file path. Defaults to backend/instance/address_book.sqlite3 (ephemeral).
+      # On Render free tier, ephemeral storage automatically purges demo data across restarts.
+      # For production persistence with disk, upgrade to Starter and mount /var/data:
       # - key: DATABASE
-      #   value: /var/data/address_book.sqlite3
+      #   value: /var/data/contacthub.sqlite3
     # disk:
-    #   name: addressbook-data
+    #   name: contacthub-data
     #   mountPath: /var/data
     #   sizeGB: 1
 
   # ---------- Frontend Static Site ----------
   - type: web
-    name: addressbook-web
+    name: contacthub-web
     runtime: static
     branch: main
     autoDeployTrigger: commit
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
-    # Vue Router uses history mode; rewrite routes like /settings to /index.html
     routes:
       - type: rewrite
         source: /*
@@ -58,11 +56,7 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22.12.0"
-      # Production build defaults to real backend; declared explicitly to avoid mock usage.
       - key: VITE_USE_MOCK
         value: "false"
-      # Backend API root URL. Set the actual addressbook-api URL after deployment, e.g.:
-      #   https://addressbook-api.onrender.com/api/v1
-      # Note: Re-deployment with "Clear build cache & deploy" is required after modification.
       - key: VITE_API_BASE_URL
         sync: false

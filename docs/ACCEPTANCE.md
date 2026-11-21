@@ -1,8 +1,8 @@
-# 通讯录管理系统 · 验收方法（v0.4.0）
+# ContactHub 联系人管理系统 · 验收测试规范（v1.0.0）
 
-> 适用范围：前端项目**除 375px 手机端适配外**的全部功能。
+> 适用范围：全功能验收（包含桌面端 1280px 常驻面板、1024px 抽屉、768px 平板抽屉及响应式布局）。
 > 验收环境：Chrome / Edge 最近两个大版本；Node.js 20.19+ 或 22.12+；推荐窗口 **1280×960**、浏览器缩放 100%。
-> 配套文档：[API.md](API.md)｜[UI_DESIGN.md](UI_DESIGN.md)｜[UI_DESIGN_PHASE2.md](UI_DESIGN_PHASE2.md)｜[UI_DESIGN_PHASE3.md](UI_DESIGN_PHASE3.md)
+> 配套文档：[API.md](API.md)｜[CODING_STANDARDS.md](CODING_STANDARDS.md)｜[DEPLOY_RENDER.md](DEPLOY_RENDER.md)
 
 ---
 
