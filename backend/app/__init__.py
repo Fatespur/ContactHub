@@ -133,9 +133,11 @@ def contact_filters() -> tuple[str, list]:
             "OR EXISTS (SELECT 1 FROM phones p WHERE p.contact_id = c.id "
             "AND p.number LIKE ? ESCAPE '\\') "
             "OR EXISTS (SELECT 1 FROM emails e WHERE e.contact_id = c.id "
-            "AND e.email LIKE ? ESCAPE '\\'))"
+            "AND e.email LIKE ? ESCAPE '\\') "
+            "OR EXISTS (SELECT 1 FROM addresses a WHERE a.contact_id = c.id "
+            "AND a.address LIKE ? ESCAPE '\\'))"
         )
-        parameters.extend([pattern] * 4)
+        parameters.extend([pattern] * 5)
     where = " WHERE " + " AND ".join(conditions) if conditions else ""
     return where, parameters
 

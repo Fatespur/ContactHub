@@ -1,123 +1,87 @@
-# AddressBook Frontend (Vue 3 + Element Plus)
+# ContactHub 前端工程 (Vue 3 + Vite + Element Plus)
 
-Single-page web application for the AddressBook project, built with Vue 3, Vite, and Element Plus.
+本模块为 **ContactHub（联系人管理与数据交换系统）** 的单页前端 Web 应用，基于 Vue 3、Vite 7 与 Element Plus 构建。界面已全面完成简体中文本地化（zh-cn），并具备完整的交互设计、键盘无障碍支持与自适应多端响应能力。
 
 ---
 
-## 1. Getting Started
+## 1. 快速上手
 
-### Prerequisites
+### 环境要求
 
-- Node.js `20.19+` or `22.12+` (required by Vite 7).
-- npm `10+`.
+- **Node.js**: `20.19+` 或 `22.12+`（满足 Vite 7 运行时标准）。
+- **npm**: `10+`。
 
-### Local Run
+### 本地启动
 
 ```bash
 cd frontend
 npm install
-npm run dev      # Local dev server at http://localhost:5173
-npm run build    # Production build output to dist/
-npm run preview  # Preview production build locally
+npm run dev      # 启动本地开发服务，访问 http://localhost:5173
+npm run build    # 编译生产优化产物至 dist/ 目录
+npm run preview  # 本地预览生产构建产物
 ```
 
 ---
 
-## 2. Data Sources & Backend Integration
+## 2. 数据源与联调模式
 
-### Mock Mode vs. Real API
+### Mock 模式与真实后端
 
-- **Development (`npm run dev`)**: Defaults to built-in **Mock data** (`src/mock/contacts.js`, 20 demo contact records) for standalone frontend development and UI demonstration. The mock implementation adheres strictly to the [API Contract](../docs/API.md), including pagination, search, group filtering, favorite toggling, and full PUT updates.
-- **Production (`npm run build`)**: Automatically defaults to the **Real Backend** (`VITE_USE_MOCK=false`) when `VITE_USE_MOCK` is unset, preventing mock data from leaking into production deployments.
+- **开发模式 (`npm run dev`)**：默认启用内置 **Mock 模式**（`src/mock/contacts.js`，包含 20 条经典中文演示记录），便于脱离后端独立进行 UI 调试。Mock 模块完整还原了 [RESTful API 契约](../docs/API.md) 的行为（分页、模糊搜索、分组筛选、收藏切换、全量更新与删除）。
+- **生产构建 (`npm run build`)**：当环境变量 `VITE_USE_MOCK` 未明确指定时，自动切断 Mock 模式并直连真实后端，杜绝测试数据泄漏至生产环境。
 
-### Switching to the Real Backend
+### 切换至本地 Flask 后端
 
-To connect the local frontend dev server to the live Flask backend:
+若要将前端开发服务接入本地运行的 Flask 服务（`http://127.0.0.1:5000`）：
 
-1. Create a `frontend/.env.local` file:
-   ```bash
+1. 在 `frontend/` 根目录下创建 `.env.local`：
+   ```ini
    VITE_USE_MOCK=false
    ```
-2. Start the Flask backend server on `http://127.0.0.1:5000` (see [Backend README](../backend/README.md)).
-3. Start the frontend dev server:
+2. 启动 Flask 后端（参考 [后端服务说明](../backend/README.md)）。
+3. 启动或重启前端开发服务：
    ```bash
    npm run dev
    ```
-4. All API requests to `/api/v1/*` are proxied by `vite.config.js` to `http://127.0.0.1:5000`.
-
-### Production Deployment Configuration
-
-When deploying frontend and backend to separate domains (e.g., Render Static Site + Web Service):
-
-1. Set the build-time environment variable:
-   ```bash
-   # frontend/.env.production.local
-   VITE_API_BASE_URL=https://addressbook-api.onrender.com/api/v1
-   ```
-2. Ensure the backend configures `CORS_ORIGINS` to allow the frontend origin.
-3. For full deployment instructions, see [Render Deployment Guide](../docs/DEPLOY_RENDER.md).
+4. 所有以 `/api/v1/*` 开头的请求均由 Vite 自动代理转发至 `http://127.0.0.1:5000`。
 
 ---
 
-## 3. Implemented Features
+## 3. 功能特性与设计亮点
 
-- **Three-Column Responsive Layout**:
-  - Desktop (>= 1280px): Persistent sidebar navigation, contact list table, and contact detail panel.
-  - Medium / Laptop (1024px – 1279px): Detail view transitions into a smooth right-side slide-over drawer.
-  - Tablet (768px – 1023px): Collapsible icon-rail sidebar and condensed 5-column table.
-- **Contact List & Filtering**:
-  - Real-time search with 300ms debounce across name, notes, phone, and email.
-  - Group filtering with dynamic badge counts.
-  - "Favorites only" quick filter.
-  - Pagination (10, 20, 50 items per page).
-  - Client-side column sorting by contact name on current page.
-- **Contact Details**:
-  - Avatar generator, favorite star toggle with optimistic UI updates and rollback on failure.
-  - Full details for multiple phones, emails, social accounts, and physical addresses.
-- **Create & Edit (Modal Form)**:
-  - Dynamic rows for 4 contact sub-types (phones, emails, socials, addresses).
-  - Strict mutual exclusion for primary (`is_primary`) flags within each sub-category.
-  - Client-side validation matching backend constraints (phone regex without spaces, email format, address length <= 200).
-  - Form dirty checking with exit confirmation to prevent accidental loss of edits.
-  - Backend validation error mapping to individual fields and list item rows.
-  - Full 8-field payload submission for strict PUT update contract.
-- **Deletion**:
-  - Single deletion with confirmation dialog.
-  - Batch deletion (sequential deletion with progress).
-- **Excel Import**:
-  - Drag-and-drop or file picker, 10MB limit and `.xlsx` extension validation.
-  - Upload progress indication and request abort (`AbortController`).
-  - Import summary dialog displaying total rows, success count, failure count, and downloadable CSV error report.
-  - Built-in template download (`contacts-import-template.xlsx`).
-- **Excel Export**:
-  - Export filtered contacts matching current search criteria.
-  - Automatic filename extraction from `Content-Disposition` header.
-- **Keyboard Shortcuts & Accessibility**:
-  - `Ctrl + K` / `Cmd + K`: Focus search bar.
-  - `Esc`: Close dialogs and drawers.
-  - `Enter` on row: Open contact detail.
-  - ARIA attributes and focus trap on modals.
-- **Settings View**:
-  - Data source status display, template download, keyboard shortcut cheat sheet, and project information.
+- **响应式三栏与抽屉布局**：
+  - 桌面端 (>= 1280px)：左侧常驻分类导航、中间联系人主列表、右侧完整详情面板三栏并行。
+  - 笔记本 / 中屏 (1024px – 1279px)：详情面板平滑转换为右侧滑出抽屉（Drawer），保障主列表视图区域。
+  - 平板端 (768px – 1023px)：侧边栏自适应折叠为图标导轨（Rail），表格自动优化显示列。
+- **联系人列表与即时筛选**：
+  - 300ms 防抖的实时多字段模糊搜索（姓名、电话、邮箱、备注、详细地址）。
+  - 分组分类筛选与动态联系人计数徽章。
+  - 快速仅看收藏（`is_favorite`）开关。
+  - 分页大小调节器（10 / 20 / 50 条每页）与上一页/下一页/页码直达器。
+- **联系人录入与编辑 (模态表单)**：
+  - 4 种扩展子类型（电话、邮箱、社交账号、地址）动态增删与排序。
+  - 主要联络项（`is_primary`）互斥单选与智能兜底。
+  - 前端实时格式防呆校验与后端校验错误字段精准标红对应。
+  - 脏数据检测（Dirty Check）与离开确认防丢失弹窗。
+- **Excel 批量导入与导出**：
+  - 拖拽与点击选取 `.xlsx` 文件，10MB 上限与文件类型防护。
+  - 上传与服务端解析进度条反馈，支持一键取消请求（`AbortController`）。
+  - 导入完成后呈现总行数、成功数、失败数概览及失败行号与原因列表，支持导出失败明细 CSV。
+  - 导出当前筛选视图的所有联系人为标准 Excel 表格。
+- **键盘快捷键与无障碍**：
+  - `Ctrl + K` / `Cmd + K`：快速聚焦搜索输入框。
+  - `Esc`：快速关闭抽屉或弹出对话框。
+  - `Enter`：直接选中行并打开详情。
+  - ARIA 标签与对话框焦点循环陷阱（Focus Trap）。
 
 ---
 
-## 4. Excel Import & Export Specifications
+## 4. 生产构建规范
 
-- **Import Template**: Located at `public/templates/contacts-import-template.xlsx` (8 columns + "Instructions" sheet), served at `/templates/contacts-import-template.xlsx`.
-- **Mock Mode**:
-  - Import simulates a 10-row import (8 successful, 2 failed) and appends 8 mock contacts to memory.
-  - Export generates a mock CSV demo file with `_mock` in the filename.
-- **Real Mode**:
-  - Import submits `multipart/form-data` with field `file` to `POST /contacts/import` (60s timeout).
-  - Export requests `GET /contacts/export` as a binary blob.
-- **Post-Import Workflow**: Refreshes list and group counts, and automatically selects the newly imported record.
-
----
-
-## 5. Known Limitations
-
-- **Excel Round-Trip Ambiguity**: Consistent with the backend contract, multi-line cells and semicolon delimiters may split or merge values upon repeated export-import cycles. Primary flags default to the first entry if none are marked.
-- **Group Statistics at Scale**: Group badge counts are computed client-side from a single query (`page_size=100`). If total contacts exceed 100, counts reflect the sampled dataset until a dedicated group aggregation endpoint is provided.
-- **Client-Side Page Sorting**: Contact name sorting via Element Plus table header applies only to the current page, as the backend API does not currently expose sort query parameters.
-- **Mobile Viewport (< 768px)**: Viewports narrower than 768px maintain a minimum 768px width with horizontal scrolling; dedicated mobile layout (< 768px) is not yet implemented.
+执行：
+```bash
+npm run build
+```
+构建成功后生成标准静态资源：
+- `dist/index.html`：入口 HTML，预设简体中文语言属性 `lang="zh-CN"`。
+- `dist/assets/`：已通过 Rollup 进行代码压缩、Tree-shaking、CSS 提取与 Hash 版本命名的生产资源。

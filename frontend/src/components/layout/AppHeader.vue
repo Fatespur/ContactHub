@@ -9,8 +9,8 @@ import AppIcon from '@/components/common/AppIcon.vue'
         <AppIcon name="users" :size="22" />
       </div>
       <div class="brand-text">
-        <h1>通讯录管理系统</h1>
-        <p>AddressBook</p>
+        <h1>联系人管理与数据交换系统</h1>
+        <p>ContactHub</p>
       </div>
     </div>
   </header>

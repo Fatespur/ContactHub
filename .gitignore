@@ -67,6 +67,7 @@ temp/
 .tmp/
 .tmp-dl/
 .pytest-tmp/
+.pytest_temp/
 tmpprobe/
 
 # IDE & Editors

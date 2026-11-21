@@ -48,8 +48,12 @@ import { IMPORT_TEMPLATE_NAME, IMPORT_TEMPLATE_URL } from '@/utils/excel'
     <section class="settings-section">
       <h3>关于</h3>
       <div class="setting-row">
+        <span class="label">系统名称</span>
+        <span class="value">联系人管理与数据交换系统（ContactHub）</span>
+      </div>
+      <div class="setting-row">
         <span class="label">版本</span>
-        <span class="value">v0.4.0（除手机端外完成）</span>
+        <span class="value">v1.0.0 正式中文版</span>
       </div>
       <div class="setting-row">
         <span class="label">技术栈</span>
@@ -61,7 +65,7 @@ import { IMPORT_TEMPLATE_NAME, IMPORT_TEMPLATE_URL } from '@/utils/excel'
       </div>
     </section>
 
-    <p class="about">EE308FZ-AddressBook · 通讯录管理系统</p>
+    <p class="about">ContactHub · 联系人管理与数据交换系统</p>
   </div>
 </template>
 

@@ -360,7 +360,7 @@ async function handleExport() {
           ref="searchInputRef"
           v-model="searchText"
           class="search-input"
-          placeholder="搜索姓名、电话号码、邮箱或备注..."
+          placeholder="搜索姓名、电话号码、邮箱、地址或备注..."
           clearable
         >
           <template #prefix>
